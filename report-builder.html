@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-902RJPS89Z"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-902RJPS89Z');</script>
+<title>Report Builder — Pete McDonnell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+/* ============================================================
+   REPORT BUILDER — INPUT FORM + LIVE PREVIEW
+   ============================================================ */
+
+:root {
+  --bg: #fafaf8;
+  --white: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #f3f2ee;
+  --border: #e2e0d8;
+  --border-light: #eceae4;
+  --text: #1a1a18;
+  --text-mid: #3d3d38;
+  --text-muted: #6b6b62;
+  --text-dim: #9a998f;
+  --accent: #1b4d3e;
+  --accent-light: #26664f;
+  --gold: #b8862d;
+  --gold-light: #d4a84a;
+  --green: #16a34a;
+  --green-bg: rgba(22, 163, 74, 0.08);
+  --red: #dc2626;
+  --red-bg: rgba(220, 38, 38, 0.06);
+  --amber: #ca8a04;
+  --amber-bg: rgba(202, 138, 4, 0.08);
+  --player-color: #b8862d;
+  --program-color: #2563eb;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- BUILDER LAYOUT ---- */
+.builder-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.builder-title {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.builder-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover { background: var(--accent-light); }
+
+.btn-secondary {
+  background: var(--surface-alt);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { background: var(--border-light); }
+
+.btn-gold {
+  background: var(--gold);
+  color: #fff;
+}
+
+.btn-gold:hover { background: var(--gold-light); }
+
+/* Two-pane layout */
+.builder-layout {
+  display: grid;
+  grid-template-columns: 440px 1fr;
+  min-height: calc(100vh - 53px);
+}
+
+/* ---- INPUT PANEL ---- */
+.input-panel {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  height: calc(100vh - 53px);
+  position: sticky;
+  top: 53px;
+}
+
+.panel-section {
+  padding: 28px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field:last-child { margin-bottom: 0; }
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+
+.field textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Scoring dimensions */
+.dimension-input {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  padding: 16px;
+  margin-bottom: 2px;
+}
+
+.dimension-input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.dimension-input-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.dimension-input-scores {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+
+.dimension-input-scores span {
+  color: var(--text-dim);
+}
+
+.score-input {
+  width: 48px !important;
+  text-align: center;
+  font-weight: 600;
+  padding: 6px 4px !important;
+  font-size: 15px !important;
+}
+
+.score-input.player-score { border-color: var(--player-color) !important; color: var(--player-color); }
+.score-input.program-score { border-color: var(--program-color) !important; color: var(--program-color); }
+
+.dimension-input-rubric {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+  margin-top: 6px;
+}
+
+.rubric-toggle {
+  font-size: 11px;
+  color: var(--accent);
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  padding: 0;
+  margin-top: 4px;
+}
+
+.rubric-toggle:hover { text-decoration: underline; }
+
+.rubric-detail {
+  display: none;
+  margin-top: 8px;
+  padding: 10px 12px;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.rubric-detail.open { display: block; }
+
+.rubric-level {
+  margin-bottom: 4px;
+}
+
+.rubric-level strong {
+  color: var(--text);
+}
+
+.category-header {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 12px 0 8px;
+  margin-top: 8px;
+}
+
+/* Findings inputs */
+.finding-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: start;
+}
+
+.finding-row input {
+  flex: 1;
+}
+
+.finding-bullet {
+  width: 8px;
+  height: 8px;
+  margin-top: 14px;
+  flex-shrink: 0;
+}
+
+.finding-bullet.strength { background: var(--green); }
+.finding-bullet.concern { background: var(--red); }
+
+.add-finding {
+  font-size: 12px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  padding: 4px 0;
+}
+
+.add-finding:hover { text-decoration: underline; }
+
+/* Priority inputs */
+.priority-input {
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  padding: 16px;
+  margin-bottom: 2px;
+}
+
+.priority-input .field { margin-bottom: 8px; }
+
+/* Score legend */
+.score-legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.score-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-legend-dot {
+  width: 10px;
+  height: 10px;
+}
+
+.score-legend-dot.player { background: var(--player-color); }
+.score-legend-dot.program { background: var(--program-color); }
+
+/* ---- PREVIEW PANEL ---- */
+.preview-panel {
+  overflow-y: auto;
+  padding: 48px;
+  background: var(--bg);
+}
+
+/* ---- REPORT STYLES (reused from tactical-fit-report) ---- */
+.report {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 48px;
+}
+
+.report-header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 36px;
+  margin-bottom: 40px;
+}
+
+.report-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.report-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.report-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.15;
+}
+
+.report-date {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: right;
+  line-height: 1.5;
+}
+
+.report-date span { display: block; }
+
+.header-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 28px;
+  align-items: start;
+}
+
+.detail-group h3 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.detail-group p {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.detail-group p span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* Compat score */
+.compat-score {
+  text-align: center;
+  padding: 20px 28px;
+  border: 1px solid var(--border);
+  min-width: 160px;
+}
+
+.compat-score-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.compat-score-value {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.compat-score-suffix {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--text-dim);
+}
+
+.compat-score-verdict {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.score-excellent { color: var(--green); }
+.score-good { color: var(--gold); }
+.score-moderate { color: var(--amber); }
+.score-poor { color: var(--red); }
+
+/* Report sections */
+.r-section { margin-bottom: 44px; }
+
+.r-section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.r-section-num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--gold);
+  opacity: 0.5;
+}
+
+.r-section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.r-section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Charts */
+.charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.chart-box {
+  border: 1px solid var(--border-light);
+  padding: 20px;
+  background: var(--surface-alt);
+}
+
+.chart-box-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.chart-box-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  margin-bottom: 12px;
+}
+
+.chart-box-title .hl-player { color: var(--player-color); }
+.chart-box-title .hl-program { color: var(--program-color); }
+
+.chart-wrap { max-width: 320px; margin: 0 auto; }
+
+.overlay-box {
+  border: 1px solid var(--border-light);
+  padding: 20px;
+  background: var(--surface-alt);
+}
+
+.overlay-wrap { max-width: 420px; margin: 0 auto; }
+
+.chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.legend-dot.player { background: var(--player-color); }
+.legend-dot.program { background: var(--program-color); }
+
+/* Dimension breakdown */
+.dim-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.dim-cat {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 12px 16px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  grid-column: 1 / -1;
+}
+
+.dim-card {
+  background: var(--surface-alt);
+  padding: 16px;
+  border: 1px solid var(--border-light);
+}
+
+.dim-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.dim-scores {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.dim-ps, .dim-pd {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dim-ps { color: var(--player-color); }
+.dim-pd { color: var(--program-color); }
+
+.dim-vs {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dim-bar {
+  height: 3px;
+  background: var(--border);
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.dim-bar-fill { height: 100%; }
+
+.dim-gap {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.gap-pos { color: var(--green); }
+.gap-neg { color: var(--red); }
+.gap-even { color: var(--text-dim); }
+
+/* Findings */
+.findings-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.findings-box {
+  border: 1px solid var(--border-light);
+  padding: 24px;
+}
+
+.findings-box h4 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.findings-box h4.str { color: var(--green); }
+.findings-box h4.con { color: var(--red); }
+
+.findings-box ul { list-style: none; }
+
+.findings-box li {
+  font-size: 13px;
+  color: var(--text);
+  padding: 6px 0 6px 14px;
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+  line-height: 1.5;
+}
+
+.findings-box li:last-child { border-bottom: none; }
+
+.findings-box li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  width: 5px;
+  height: 5px;
+}
+
+.findings-box.str-box li::before { background: var(--green); }
+.findings-box.con-box li::before { background: var(--red); }
+
+/* Recommendation */
+.rec-box {
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--gold);
+  padding: 24px 24px 24px 28px;
+}
+
+.rec-box h4 {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.rec-box p {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* Priorities */
+.pri-list { display: flex; flex-direction: column; gap: 2px; }
+
+.pri-card {
+  border: 1px solid var(--border-light);
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.pri-num {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--gold);
+  opacity: 0.4;
+  line-height: 1;
+}
+
+.pri-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.pri-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Report footer */
+.report-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.report-footer strong { color: var(--text-muted); }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 1100px) {
+  .builder-layout { grid-template-columns: 1fr; }
+  .input-panel {
+    position: relative;
+    height: auto;
+    top: 0;
+  }
+  .preview-panel { padding: 24px; }
+}
+
+@media (max-width: 768px) {
+  .report { padding: 24px; }
+  .header-details { grid-template-columns: 1fr; }
+  .charts-row { grid-template-columns: 1fr; }
+  .dim-grid { grid-template-columns: 1fr 1fr; }
+  .findings-row { grid-template-columns: 1fr; }
+}
+
+/* ---- NAV BAR ---- */
+.tool-nav {
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  height: 36px;
+}
+
+.tool-nav a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  padding: 0 16px;
+  line-height: 36px;
+  transition: color 0.2s;
+}
+
+.tool-nav a:hover { color: rgba(255,255,255,0.85); }
+.tool-nav a.active { color: #fff; }
+
+/* Profile selector */
+.profile-selector {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.profile-selector label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.profile-selector select {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 8px 10px;
+  outline: none;
+}
+
+.profile-selector .profile-meta {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.profile-selector .profile-link {
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.profile-selector .profile-link:hover { text-decoration: underline; }
+
+/* ---- PRINT ---- */
+@media print {
+  .builder-header, .input-panel, .tool-nav { display: none !important; }
+  .builder-layout { grid-template-columns: 1fr !important; }
+  .preview-panel { padding: 0 !important; overflow: visible !important; }
+  .report { border: none; box-shadow: none; max-width: 100%; }
+  .r-section { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="tool-nav">
+  <a href="index.html">Home</a>
+  <a href="program-scout.html">Program Scout</a>
+  <a href="report-builder.html" class="active">Report Builder</a>
+</div>
+
+<!-- BUILDER HEADER -->
+<div class="builder-header">
+  <div class="builder-title">Report Builder</div>
+  <div class="builder-actions">
+    <button class="btn btn-secondary" onclick="resetForm()">Clear All</button>
+    <button class="btn btn-secondary" onclick="saveToLocal()">Save Draft</button>
+    <button class="btn btn-secondary" onclick="loadFromLocal()">Load Draft</button>
+    <button class="btn btn-primary" onclick="window.print()">Print / PDF</button>
+  </div>
+</div>
+
+<div class="builder-layout">
+
+  <!-- INPUT PANEL -->
+  <div class="input-panel">
+
+    <!-- Player Details -->
+    <div class="panel-section">
+      <div class="panel-section-title">Player Information</div>
+      <div class="field">
+        <label>Player Name</label>
+        <input type="text" id="playerName" value="Marcus Rivera" oninput="render()">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Position</label>
+          <input type="text" id="playerPosition" value="Center Forward" oninput="render()">
+        </div>
+        <div class="field">
+          <label>Age</label>
+          <input type="number" id="playerAge" value="17" oninput="render()">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Grad Year</label>
+          <input type="text" id="playerGradYear" value="2026" oninput="render()">
+        </div>
+        <div class="field">
+          <label>Current Club</label>
+          <input type="text" id="playerClub" value="Philadelphia Union Academy" oninput="render()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Program Details -->
+    <div class="panel-section">
+      <div class="panel-section-title">Target Program</div>
+
+      <div class="profile-selector">
+        <label>Load Saved Program Profile</label>
+        <select id="profileSelect" onchange="loadProgramProfile()">
+          <option value="">-- Manual entry --</option>
+        </select>
+        <div class="profile-meta" id="profileMeta"></div>
+        <a href="program-scout.html" class="profile-link" target="_blank">Scout a new program &rarr;</a>
+      </div>
+
+      <div class="field">
+        <label>College Program</label>
+        <input type="text" id="programName" value="University of Virginia" oninput="render()">
+      </div>
+      <div class="field">
+        <label>System / Style</label>
+        <input type="text" id="programStyle" value="Possession-dominant 4-3-3" oninput="render()">
+      </div>
+    </div>
+
+    <!-- Scoring -->
+    <div class="panel-section">
+      <div class="panel-section-title">Tactical Scoring</div>
+
+      <div class="score-legend">
+        <div class="score-legend-item"><span class="score-legend-dot player"></span> Player</div>
+        <div class="score-legend-item"><span class="score-legend-dot program"></span> Program Demands</div>
+      </div>
+
+      <div id="scoringInputs"></div>
+    </div>
+
+    <!-- Key Findings -->
+    <div class="panel-section">
+      <div class="panel-section-title">Key Findings</div>
+
+      <label style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;display:block;">Strengths of Match</label>
+      <div id="strengthInputs"></div>
+      <button class="add-finding" onclick="addFinding('strength')">+ Add strength</button>
+
+      <div style="margin-top:20px;">
+        <label style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;display:block;">Areas of Concern</label>
+        <div id="concernInputs"></div>
+        <button class="add-finding" onclick="addFinding('concern')">+ Add concern</button>
+      </div>
+    </div>
+
+    <!-- Recommendation -->
+    <div class="panel-section">
+      <div class="panel-section-title">Expert Recommendation</div>
+      <div class="field">
+        <label>Written Narrative</label>
+        <textarea id="recommendation" rows="6" oninput="render()">Marcus is an exceptional athlete and finisher whose profile is built for transition-heavy, direct systems. UVA's possession-dominant 4-3-3 demands a center forward comfortable receiving with back to goal, linking play in tight spaces, and maintaining positional discipline. While his physical tools and pressing intensity are assets, the critical gaps in possession retention, build-up involvement, and positional discipline represent foundational requirements of this system. This is a high-risk fit.</textarea>
+      </div>
+    </div>
+
+    <!-- Development Priorities -->
+    <div class="panel-section">
+      <div class="panel-section-title">Development Priorities</div>
+      <div id="priorityInputs"></div>
+      <button class="add-finding" onclick="addPriority()" style="margin-top:8px;">+ Add priority</button>
+    </div>
+
+  </div>
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+    <div class="report" id="reportPreview"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   SCORING RUBRICS — Each dimension with 1-10 scale guidance
+   ============================================================ */
+
+const DIMENSIONS = [
+  {
+    category: "System Fit",
+    items: [
+      {
+        name: "Transition Play",
+        desc: "Speed and quality of play in attacking transitions after winning the ball",
+        rubric: "1-3: Slow to react, rarely joins transition. 4-5: Participates but inconsistent timing. 6-7: Good pace, finds space, makes supporting runs. 8-9: Elite transition speed, decisive in counter-attacks. 10: Defines the transition - creates and finishes at the highest tempo."
+      },
+      {
+        name: "Possession Retention",
+        desc: "Comfort and ability in sustained build-up and keeping the ball under pressure",
+        rubric: "1-3: Gives the ball away under minimal pressure. 4-5: Can retain in space but struggles when pressed. 6-7: Reliable in possession, good first touch, plays simple. 8-9: Composed under heavy pressure, dictates tempo. 10: Elite ball retention - rarely dispossessed, makes teammates better."
+      },
+      {
+        name: "Pressing Intensity",
+        desc: "Work rate, pressing triggers, and effort without the ball",
+        rubric: "1-3: Passive, rarely engages press. 4-5: Presses when directed but lacks consistency. 6-7: Good work rate, reads triggers, presses with purpose. 8-9: Relentless, forces turnovers, sets the tempo defensively. 10: Elite pressing machine - disrupts build-up singlehandedly."
+      },
+      {
+        name: "Build-Up Involvement",
+        desc: "Willingness to receive under pressure and play through lines from deeper areas",
+        rubric: "1-3: Avoids the ball in build-up, stays high. 4-5: Drops occasionally but limited passing range. 6-7: Comfortable receiving on half-turn, plays forward. 8-9: Key link player, receives between lines consistently. 10: Orchestrates build-up from any position on the pitch."
+      }
+    ]
+  },
+  {
+    category: "Positional Fit",
+    items: [
+      {
+        name: "Positional Discipline",
+        desc: "Ability to maintain structural role within the team shape",
+        rubric: "1-3: Constantly out of position, chases the ball. 4-5: Understands role but drifts under pressure. 6-7: Holds position well, understands spatial relationships. 8-9: Exceptional awareness, maintains shape in and out of possession. 10: Tactically elite - always in the right place, reads the game."
+      },
+      {
+        name: "Attacking Contribution",
+        desc: "Goal threat, creativity, and involvement in the final third",
+        rubric: "1-3: Minimal final third involvement. 4-5: Occasional threat, needs service. 6-7: Consistent goal threat, creates chances. 8-9: Decisive in the box, scores and assists regularly. 10: Match-winner - scores, creates, and drives attacking play."
+      },
+      {
+        name: "Defensive Responsibility",
+        desc: "Tracking, recovery runs, duels won, and defensive contribution",
+        rubric: "1-3: Rarely tracks back, avoids defensive work. 4-5: Makes effort but positioning is poor. 6-7: Reliable defensive contributions, wins fair share of duels. 8-9: Excellent recovery and tracking, strong in duels. 10: Defends from the front with elite work rate and intelligence."
+      },
+      {
+        name: "Width/Combination Play",
+        desc: "Ability to play in wide areas or in tight combination with teammates",
+        rubric: "1-3: Struggles in wide areas, poor combination play. 4-5: Can play wide but prefers central. 6-7: Comfortable in wide or tight spaces, links well. 8-9: Excellent combination player, creates overloads. 10: Dominates wide or tight - one-twos, overlaps, switches of play."
+      }
+    ]
+  },
+  {
+    category: "Physical / Athletic",
+    items: [
+      {
+        name: "Speed/Acceleration",
+        desc: "Pace in transition, recovery, and ability to beat players with speed",
+        rubric: "1-3: Below average pace, easily caught. 4-5: Average speed, can keep up. 6-7: Quick, uses pace to create separation. 8-9: Elite speed, regularly beats defenders. 10: Game-changing pace - fastest player on the pitch."
+      },
+      {
+        name: "Endurance/Work Capacity",
+        desc: "Ability to sustain intensity, pressing, and output across 90 minutes",
+        rubric: "1-3: Fades significantly after 60 minutes. 4-5: Can last 90 but output drops noticeably. 6-7: Maintains good intensity throughout. 8-9: High output for full 90, rarely tires. 10: Relentless - same intensity in minute 90 as minute one."
+      },
+      {
+        name: "Aerial Ability",
+        desc: "Heading accuracy, timing, and ability to compete in the air",
+        rubric: "1-3: Avoids aerial duels, poor heading. 4-5: Competes but rarely wins. 6-7: Wins a fair share, decent heading technique. 8-9: Dominant in the air, scores and defends headers. 10: Elite aerial presence - wins everything in both boxes."
+      },
+      {
+        name: "Physicality/Dueling",
+        desc: "Strength in 1v1 situations, ability to hold off or beat opponents physically",
+        rubric: "1-3: Easily outmuscled, avoids contact. 4-5: Can compete but not a strength. 6-7: Holds his own physically, wins majority of duels. 8-9: Strong, imposing, difficult to dispossess. 10: Elite physical specimen - dominates every 1v1 contest."
+      }
+    ]
+  }
+];
+
+// Default sample scores
+const DEFAULT_PLAYER = [9, 5, 8, 4, 5, 9, 6, 6, 9, 7, 8, 8];
+const DEFAULT_PROGRAM = [4, 9, 7, 8, 8, 7, 7, 8, 6, 8, 5, 6];
+
+// Build scoring inputs
+function buildScoringInputs() {
+  const container = document.getElementById('scoringInputs');
+  let html = '';
+  let idx = 0;
+
+  DIMENSIONS.forEach(cat => {
+    html += `<div class="category-header">${cat.category}</div>`;
+    cat.items.forEach(dim => {
+      html += `
+        <div class="dimension-input">
+          <div class="dimension-input-header">
+            <div class="dimension-input-name">${dim.name}</div>
+            <div class="dimension-input-scores">
+              <input type="number" class="score-input player-score" id="ps_${idx}" min="1" max="10" value="${DEFAULT_PLAYER[idx]}" oninput="render()">
+              <span>vs</span>
+              <input type="number" class="score-input program-score" id="pd_${idx}" min="1" max="10" value="${DEFAULT_PROGRAM[idx]}" oninput="render()">
+            </div>
+          </div>
+          <div class="dimension-input-rubric">${dim.desc}</div>
+          <button class="rubric-toggle" onclick="toggleRubric(this)">Scoring guide</button>
+          <div class="rubric-detail">${dim.rubric.split('. ').map(s => `<div class="rubric-level">${s.trim()}${s.trim().endsWith('.') ? '' : '.'}</div>`).join('')}</div>
+        </div>
+      `;
+      idx++;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleRubric(btn) {
+  const detail = btn.nextElementSibling;
+  detail.classList.toggle('open');
+  btn.textContent = detail.classList.contains('open') ? 'Hide guide' : 'Scoring guide';
+}
+
+// Findings
+let strengths = [
+  "Elite transition pace and finishing instinct",
+  "Pressing intensity exceeds program demand",
+  "Aerial and physical profile provides an exploitable dimension"
+];
+
+let concerns = [
+  "Significant gap in possession retention (core to program identity)",
+  "Build-up involvement well below program demand",
+  "Positional discipline gap could create structural issues"
+];
+
+function buildFindings() {
+  buildFindingList('strengthInputs', strengths, 'strength');
+  buildFindingList('concernInputs', concerns, 'concern');
+}
+
+function buildFindingList(containerId, arr, type) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = arr.map((s, i) => `
+    <div class="finding-row">
+      <span class="finding-bullet ${type}"></span>
+      <input type="text" value="${s}" oninput="${type === 'strength' ? 'strengths' : 'concerns'}[${i}]=this.value;render()">
+    </div>
+  `).join('');
+}
+
+function addFinding(type) {
+  if (type === 'strength') { strengths.push(''); }
+  else { concerns.push(''); }
+  buildFindings();
+  render();
+}
+
+// Priorities
+let priorities = [
+  { title: "Possession Play Under Pressure", desc: "Develop comfort receiving on the half-turn in congested areas. Focus on first-touch orientation, body shape, and short combination play." },
+  { title: "Build-Up Involvement and Link Play", desc: "Expand passing range and decision-making as a focal point. Work on hold-up play, layoffs, and third-man combinations." },
+  { title: "Positional Discipline in Structured Systems", desc: "Address tendency to vacate the center forward zone. Tactical sessions with positional constraints recommended." }
+];
+
+function buildPriorities() {
+  const container = document.getElementById('priorityInputs');
+  container.innerHTML = priorities.map((p, i) => `
+    <div class="priority-input">
+      <div class="field">
+        <label>Priority ${i + 1} Title</label>
+        <input type="text" value="${p.title}" oninput="priorities[${i}].title=this.value;render()">
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea oninput="priorities[${i}].desc=this.value;render()">${p.desc}</textarea>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addPriority() {
+  priorities.push({ title: '', desc: '' });
+  buildPriorities();
+  render();
+}
+
+// ---- CALCULATION ----
+function getScores() {
+  const player = [];
+  const program = [];
+  let idx = 0;
+  DIMENSIONS.forEach(cat => {
+    cat.items.forEach(() => {
+      player.push(parseInt(document.getElementById('ps_' + idx).value) || 5);
+      program.push(parseInt(document.getElementById('pd_' + idx).value) || 5);
+      idx++;
+    });
+  });
+  return { player, program };
+}
+
+function calcFitScore(ps, pd) {
+  const weights = [1, 1, 1, 1, 1, 1, 1, 1, 0.8, 0.8, 0.6, 0.6];
+  let total = 0, tw = 0;
+  for (let i = 0; i < ps.length; i++) {
+    const w = weights[i] || 1;
+    const diff = ps[i] - pd[i];
+    let fit;
+    if (diff >= 0) {
+      fit = 100 - (diff * 2);
+      fit = Math.max(fit, 70);
+    } else {
+      fit = 100 + (diff * 12);
+      fit = Math.max(fit, 0);
+    }
+    total += fit * w;
+    tw += w;
+  }
+  return Math.round(total / tw);
+}
+
+function scoreClass(s) {
+  if (s >= 80) return 'excellent';
+  if (s >= 65) return 'good';
+  if (s >= 50) return 'moderate';
+  return 'poor';
+}
+
+function verdict(s) {
+  if (s >= 80) return 'Strong Fit';
+  if (s >= 65) return 'Moderate Fit';
+  if (s >= 50) return 'Marginal Fit';
+  return 'Poor Fit';
+}
+
+// ---- CHART INSTANCES ----
+let chartPlayer, chartProgram, chartOverlay;
+
+function destroyCharts() {
+  if (chartPlayer) chartPlayer.destroy();
+  if (chartProgram) chartProgram.destroy();
+  if (chartOverlay) chartOverlay.destroy();
+}
+
+// ---- RENDER ----
+function render() {
+  const { player, program } = getScores();
+  const overall = calcFitScore(player, program);
+  const sc = scoreClass(overall);
+
+  const pName = document.getElementById('playerName').value || 'Player';
+  const pPos = document.getElementById('playerPosition').value || '';
+  const pAge = document.getElementById('playerAge').value || '';
+  const pGrad = document.getElementById('playerGradYear').value || '';
+  const pClub = document.getElementById('playerClub').value || '';
+  const prName = document.getElementById('programName').value || 'Program';
+  const prStyle = document.getElementById('programStyle').value || '';
+  const rec = document.getElementById('recommendation').value || '';
+
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  // Dimension labels
+  const labels = [];
+  const shortLabels = [];
+  DIMENSIONS.forEach(cat => cat.items.forEach(d => {
+    labels.push(d.name);
+    const map = {
+      'Transition Play': 'Transition', 'Possession Retention': 'Possession',
+      'Pressing Intensity': 'Pressing', 'Build-Up Involvement': 'Build-Up',
+      'Positional Discipline': 'Pos. Discipline', 'Attacking Contribution': 'Attack',
+      'Defensive Responsibility': 'Defense', 'Width/Combination Play': 'Width/Combos',
+      'Speed/Acceleration': 'Speed', 'Endurance/Work Capacity': 'Endurance',
+      'Aerial Ability': 'Aerial', 'Physicality/Dueling': 'Physicality'
+    };
+    shortLabels.push(map[d.name] || d.name);
+  }));
+
+  // Build dimension breakdown
+  let dimHtml = '';
+  let idx = 0;
+  DIMENSIONS.forEach(cat => {
+    dimHtml += `<div class="dim-cat">${cat.category}</div>`;
+    cat.items.forEach(d => {
+      const ps = player[idx], pd = program[idx];
+      const diff = ps - pd;
+      const pct = Math.min(Math.round((ps / pd) * 100), 100);
+      const barColor = diff >= 0 ? 'var(--green)' : 'var(--red)';
+      const gapClass = diff > 0 ? 'gap-pos' : diff < 0 ? 'gap-neg' : 'gap-even';
+      const gapText = diff > 0 ? `+${diff} above` : diff < 0 ? `${diff} below` : 'Exact match';
+      dimHtml += `
+        <div class="dim-card">
+          <div class="dim-name">${d.name}</div>
+          <div class="dim-scores">
+            <span class="dim-ps">${ps}</span>
+            <span class="dim-vs">vs</span>
+            <span class="dim-pd">${pd}</span>
+          </div>
+          <div class="dim-bar"><div class="dim-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+          <div class="dim-gap ${gapClass}">${gapText}</div>
+        </div>
+      `;
+      idx++;
+    });
+  });
+
+  // Strengths/concerns
+  const strHtml = strengths.filter(s => s.trim()).map(s => `<li>${s}</li>`).join('');
+  const conHtml = concerns.filter(s => s.trim()).map(s => `<li>${s}</li>`).join('');
+
+  // Priorities
+  const priHtml = priorities.filter(p => p.title.trim()).map((p, i) => `
+    <div class="pri-card">
+      <div class="pri-num">${i + 1}</div>
+      <div>
+        <div class="pri-title">${p.title}</div>
+        <div class="pri-desc">${p.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Full report HTML
+  document.getElementById('reportPreview').innerHTML = `
+    <header class="report-header">
+      <div class="report-header-top">
+        <div>
+          <div class="report-label">Recruitment Intelligence</div>
+          <h1 class="report-title">Player Tactical Fit Report</h1>
+        </div>
+        <div class="report-date">
+          <span>${today}</span>
+          <span style="color:var(--text-dim);font-size:12px;">Prepared by Pete McDonnell</span>
+        </div>
+      </div>
+      <div class="header-details">
+        <div class="detail-group">
+          <h3>Player</h3>
+          <p><strong>${pName}</strong></p>
+          <p>${pPos} <span>· Age ${pAge} · Class of ${pGrad}</span></p>
+          <p><span>${pClub}</span></p>
+        </div>
+        <div class="detail-group">
+          <h3>Target Program</h3>
+          <p><strong>${prName}</strong></p>
+          <p><span>${prStyle}</span></p>
+        </div>
+        <div class="compat-score">
+          <div class="compat-score-label">Compatibility</div>
+          <div class="compat-score-value score-${sc}">${overall}<span class="compat-score-suffix">/100</span></div>
+          <div class="compat-score-verdict score-${sc}">${verdict(overall)}</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="r-section">
+      <div class="r-section-header">
+        <span class="r-section-num">01</span>
+        <h2 class="r-section-title">Tactical Profiles</h2>
+        <div class="r-section-line"></div>
+      </div>
+      <div class="charts-row">
+        <div class="chart-box">
+          <div class="chart-box-label">Player Profile</div>
+          <div class="chart-box-title"><span class="hl-player">${pName}</span></div>
+          <div class="chart-wrap"><canvas id="cPlayer"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-box-label">Program Demands</div>
+          <div class="chart-box-title"><span class="hl-program">${prName}</span></div>
+          <div class="chart-wrap"><canvas id="cProgram"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="r-section">
+      <div class="r-section-header">
+        <span class="r-section-num">02</span>
+        <h2 class="r-section-title">Compatibility Overlay</h2>
+        <div class="r-section-line"></div>
+      </div>
+      <div class="overlay-box">
+        <div class="overlay-wrap"><canvas id="cOverlay"></canvas></div>
+        <div class="chart-legend">
+          <div><span class="legend-dot player"></span> Player</div>
+          <div><span class="legend-dot program"></span> Program</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="r-section">
+      <div class="r-section-header">
+        <span class="r-section-num">03</span>
+        <h2 class="r-section-title">Dimension Breakdown</h2>
+        <div class="r-section-line"></div>
+      </div>
+      <div class="dim-grid">${dimHtml}</div>
+    </div>
+
+    <div class="r-section">
+      <div class="r-section-header">
+        <span class="r-section-num">04</span>
+        <h2 class="r-section-title">Key Findings</h2>
+        <div class="r-section-line"></div>
+      </div>
+      <div class="findings-row">
+        <div class="findings-box str-box"><h4 class="str">Strengths of Match</h4><ul>${strHtml}</ul></div>
+        <div class="findings-box con-box"><h4 class="con">Areas of Concern</h4><ul>${conHtml}</ul></div>
+      </div>
+      <div class="rec-box">
+        <h4>Expert Recommendation</h4>
+        <p>${rec}</p>
+      </div>
+    </div>
+
+    <div class="r-section">
+      <div class="r-section-header">
+        <span class="r-section-num">05</span>
+        <h2 class="r-section-title">Development Priorities</h2>
+        <div class="r-section-line"></div>
+      </div>
+      <div class="pri-list">${priHtml}</div>
+    </div>
+
+    <footer class="report-footer">
+      <div><strong>Pete McDonnell</strong> · Recruitment Intelligence</div>
+      <div>Confidential</div>
+    </footer>
+  `;
+
+  // Draw charts
+  destroyCharts();
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.color = '#9a998f';
+
+  const rOpts = {
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, display: false },
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        angleLines: { color: 'rgba(0,0,0,0.06)' },
+        pointLabels: { font: { size: 9, weight: 500 }, color: '#6b6b62', padding: 6 }
+      }
+    },
+    plugins: { legend: { display: false }, tooltip: { enabled: true } }
+  };
+
+  chartPlayer = new Chart(document.getElementById('cPlayer'), {
+    type: 'radar',
+    data: {
+      labels: shortLabels,
+      datasets: [{
+        data: player,
+        backgroundColor: 'rgba(184,134,45,0.12)',
+        borderColor: 'rgba(184,134,45,0.8)',
+        borderWidth: 2,
+        pointBackgroundColor: '#b8862d',
+        pointRadius: 3
+      }]
+    },
+    options: rOpts
+  });
+
+  chartProgram = new Chart(document.getElementById('cProgram'), {
+    type: 'radar',
+    data: {
+      labels: shortLabels,
+      datasets: [{
+        data: program,
+        backgroundColor: 'rgba(37,99,235,0.12)',
+        borderColor: 'rgba(37,99,235,0.8)',
+        borderWidth: 2,
+        pointBackgroundColor: '#2563eb',
+        pointRadius: 3
+      }]
+    },
+    options: rOpts
+  });
+
+  chartOverlay = new Chart(document.getElementById('cOverlay'), {
+    type: 'radar',
+    data: {
+      labels: shortLabels,
+      datasets: [
+        {
+          label: pName,
+          data: player,
+          backgroundColor: 'rgba(184,134,45,0.1)',
+          borderColor: 'rgba(184,134,45,0.85)',
+          borderWidth: 2,
+          pointBackgroundColor: '#b8862d',
+          pointRadius: 3
+        },
+        {
+          label: prName,
+          data: program,
+          backgroundColor: 'rgba(37,99,235,0.1)',
+          borderColor: 'rgba(37,99,235,0.85)',
+          borderWidth: 2,
+          pointBackgroundColor: '#2563eb',
+          pointRadius: 3
+        }
+      ]
+    },
+    options: rOpts
+  });
+}
+
+// ---- SAVE / LOAD ----
+function saveToLocal() {
+  const { player, program } = getScores();
+  const data = {
+    playerName: document.getElementById('playerName').value,
+    playerPosition: document.getElementById('playerPosition').value,
+    playerAge: document.getElementById('playerAge').value,
+    playerGradYear: document.getElementById('playerGradYear').value,
+    playerClub: document.getElementById('playerClub').value,
+    programName: document.getElementById('programName').value,
+    programStyle: document.getElementById('programStyle').value,
+    playerScores: player,
+    programScores: program,
+    strengths, concerns, priorities,
+    recommendation: document.getElementById('recommendation').value
+  };
+  localStorage.setItem('pm_report_draft', JSON.stringify(data));
+  alert('Draft saved.');
+}
+
+function loadFromLocal() {
+  const raw = localStorage.getItem('pm_report_draft');
+  if (!raw) { alert('No saved draft found.'); return; }
+  const d = JSON.parse(raw);
+
+  document.getElementById('playerName').value = d.playerName || '';
+  document.getElementById('playerPosition').value = d.playerPosition || '';
+  document.getElementById('playerAge').value = d.playerAge || '';
+  document.getElementById('playerGradYear').value = d.playerGradYear || '';
+  document.getElementById('playerClub').value = d.playerClub || '';
+  document.getElementById('programName').value = d.programName || '';
+  document.getElementById('programStyle').value = d.programStyle || '';
+  document.getElementById('recommendation').value = d.recommendation || '';
+
+  if (d.playerScores) d.playerScores.forEach((v, i) => {
+    const el = document.getElementById('ps_' + i);
+    if (el) el.value = v;
+  });
+  if (d.programScores) d.programScores.forEach((v, i) => {
+    const el = document.getElementById('pd_' + i);
+    if (el) el.value = v;
+  });
+
+  strengths = d.strengths || [];
+  concerns = d.concerns || [];
+  priorities = d.priorities || [];
+
+  buildFindings();
+  buildPriorities();
+  render();
+}
+
+function resetForm() {
+  if (!confirm('Clear all data and start fresh?')) return;
+  document.querySelectorAll('.input-panel input, .input-panel textarea').forEach(el => {
+    if (el.type === 'number') el.value = 5;
+    else el.value = '';
+  });
+  strengths = [''];
+  concerns = [''];
+  priorities = [{ title: '', desc: '' }];
+  buildFindings();
+  buildPriorities();
+  render();
+}
+
+// ---- PROGRAM PROFILE INTEGRATION ----
+function getPrograms() {
+  return JSON.parse(localStorage.getItem('pm_program_profiles') || '[]');
+}
+
+function populateProfileDropdown() {
+  const select = document.getElementById('profileSelect');
+  const profiles = getPrograms();
+  // Keep the first "manual entry" option, clear the rest
+  select.innerHTML = '<option value="">-- Manual entry --</option>';
+  profiles.forEach((p, i) => {
+    const style = [p.style, p.formation].filter(Boolean).join(' ');
+    select.innerHTML += `<option value="${i}">${p.name}${style ? ' (' + style + ')' : ''}</option>`;
+  });
+}
+
+function loadProgramProfile() {
+  const select = document.getElementById('profileSelect');
+  const meta = document.getElementById('profileMeta');
+  const idx = select.value;
+
+  if (idx === '') {
+    meta.textContent = '';
+    return;
+  }
+
+  const profiles = getPrograms();
+  const p = profiles[parseInt(idx)];
+  if (!p) return;
+
+  // Fill program name and style
+  document.getElementById('programName').value = p.name || '';
+  const styleText = [p.style, p.formation].filter(Boolean).join(' ');
+  document.getElementById('programStyle').value = styleText;
+
+  // Fill program demand scores
+  if (p.scores && p.scores.length === 12) {
+    p.scores.forEach((s, i) => {
+      const el = document.getElementById('pd_' + i);
+      if (el && s > 0) el.value = s;
+    });
+  }
+
+  // Show metadata
+  const parts = [];
+  if (p.matchesWatched) parts.push(p.matchesWatched + ' matches watched');
+  if (p.coach) parts.push('Coach: ' + p.coach);
+  if (p.savedAt) {
+    const d = new Date(p.savedAt);
+    parts.push('Scouted ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }));
+  }
+  meta.textContent = parts.join(' · ');
+
+  render();
+}
+
+// ---- INIT ----
+buildScoringInputs();
+buildFindings();
+buildPriorities();
+populateProfileDropdown();
+
+// Auto-load program profile if passed via URL (from Program Scout)
+const urlParams = new URLSearchParams(window.location.search);
+const autoProfile = urlParams.get('program');
+if (autoProfile !== null) {
+  const select = document.getElementById('profileSelect');
+  select.value = autoProfile;
+  loadProgramProfile();
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-902RJPS89Z"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-902RJPS89Z');</script>
+<title>Program Scouting Form — Pete McDonnell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #fafaf8;
+  --white: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #f3f2ee;
+  --border: #e2e0d8;
+  --border-light: #eceae4;
+  --text: #1a1a18;
+  --text-mid: #3d3d38;
+  --text-muted: #6b6b62;
+  --text-dim: #9a998f;
+  --accent: #1b4d3e;
+  --accent-light: #26664f;
+  --gold: #b8862d;
+  --gold-light: #d4a84a;
+  --program-color: #2563eb;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- HEADER ---- */
+.app-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.app-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.app-actions { display: flex; gap: 12px; }
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-light); }
+.btn-secondary { background: var(--surface-alt); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { background: var(--border-light); }
+.btn-gold { background: var(--gold); color: #fff; }
+.btn-gold:hover { background: var(--gold-light); }
+
+/* ---- LAYOUT ---- */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  min-height: calc(100vh - 53px);
+}
+
+/* ---- MAIN FORM ---- */
+.main-form {
+  padding: 40px;
+  max-width: 800px;
+}
+
+.form-section {
+  margin-bottom: 48px;
+}
+
+.form-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.form-section-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.form-section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Fields */
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+
+.field textarea { min-height: 60px; resize: vertical; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* Dimension evaluation cards */
+.category-divider {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 16px 0 12px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.eval-card {
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  padding: 24px;
+  margin-bottom: 2px;
+}
+
+.eval-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.eval-card-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--text);
+}
+
+.eval-card-score-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eval-card-score-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.eval-score-input {
+  width: 56px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px !important;
+  padding: 8px 4px !important;
+  border-color: var(--program-color) !important;
+  color: var(--program-color);
+}
+
+.eval-question {
+  font-size: 14px;
+  color: var(--text-mid);
+  font-style: italic;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.eval-prompts {
+  margin-bottom: 12px;
+}
+
+.eval-prompts-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.eval-prompt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.eval-prompt-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+}
+
+.eval-scale {
+  display: flex;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.scale-band {
+  flex: 1;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.3;
+  border: 1px solid var(--border-light);
+  margin-right: -1px;
+  color: var(--text-dim);
+  background: var(--surface-alt);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.scale-band:hover {
+  background: var(--border-light);
+}
+
+.scale-band.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  position: relative;
+  z-index: 1;
+}
+
+.scale-band strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.eval-evidence {
+  margin-top: 8px;
+}
+
+.eval-evidence textarea {
+  font-size: 13px;
+  min-height: 50px;
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  background: var(--white);
+  border-left: 1px solid var(--border);
+  padding: 32px 24px;
+  position: sticky;
+  top: 53px;
+  height: calc(100vh - 53px);
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 32px;
+}
+
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.sidebar-program-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.sidebar-program-style {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.radar-wrap {
+  max-width: 300px;
+  margin: 0 auto 16px;
+}
+
+/* Score summary */
+.score-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+}
+
+.score-row-name { color: var(--text-muted); }
+
+.score-row-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--program-color);
+}
+
+.score-row-empty { color: var(--text-dim); font-size: 13px; }
+
+/* Saved profiles */
+.saved-profiles { margin-top: 24px; }
+
+.saved-profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  margin-bottom: 2px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.saved-profile-item:hover { background: var(--border-light); }
+
+.saved-profile-name { font-weight: 500; color: var(--text); }
+.saved-profile-style { font-size: 11px; color: var(--text-dim); }
+
+.saved-profile-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.profile-action-btn {
+  font-size: 11px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-decoration: underline;
+}
+
+.profile-action-btn.delete { color: var(--text-dim); }
+
+.no-profiles {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-style: italic;
+  padding: 12px 0;
+}
+
+/* Copy output */
+.copy-output {
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-light);
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: relative; top: 0; height: auto; }
+  .main-form { padding: 24px; }
+}
+
+@media (max-width: 600px) {
+  .field-row, .field-row-3 { grid-template-columns: 1fr; }
+  .eval-scale { flex-wrap: wrap; }
+  .scale-band { flex: none; width: 25%; }
+}
+
+/* ---- NAV BAR ---- */
+.tool-nav {
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  height: 36px;
+}
+
+.tool-nav a {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  padding: 0 16px;
+  line-height: 36px;
+  transition: color 0.2s;
+}
+
+.tool-nav a:hover { color: rgba(255,255,255,0.85); }
+.tool-nav a.active { color: #fff; }
+
+/* ---- PRINT ---- */
+@media print {
+  .app-header, .tool-nav { display: none; }
+  .main-form { display: none; }
+  .layout { grid-template-columns: 1fr; }
+  .sidebar {
+    position: relative;
+    height: auto;
+    border: none;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="tool-nav">
+  <a href="index.html">Home</a>
+  <a href="program-scout.html" class="active">Program Scout</a>
+  <a href="report-builder.html">Report Builder</a>
+</div>
+
+<div class="app-header">
+  <div class="app-title">Program Scouting Form</div>
+  <div class="app-actions">
+    <button class="btn btn-secondary" onclick="clearForm()">New Program</button>
+    <button class="btn btn-primary" onclick="saveProfile()">Save Profile</button>
+    <button class="btn btn-gold" onclick="saveAndGoToBuilder()">Save & Open Builder</button>
+  </div>
+</div>
+
+<div class="layout">
+
+  <!-- MAIN FORM -->
+  <div class="main-form">
+
+    <!-- Program Info -->
+    <div class="form-section">
+      <div class="form-section-label">Program Information</div>
+      <div class="form-section-title">College Program Details</div>
+      <div class="form-section-desc">Start by identifying the program. Watch three to five full matches before scoring.</div>
+
+      <div class="field">
+        <label>Program Name</label>
+        <input type="text" id="progName" placeholder="e.g. University of Virginia" oninput="updateSidebar()">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Conference</label>
+          <input type="text" id="progConf" placeholder="e.g. ACC">
+        </div>
+        <div class="field">
+          <label>Head Coach</label>
+          <input type="text" id="progCoach" placeholder="e.g. George Gelnovatch">
+        </div>
+      </div>
+      <div class="field-row-3">
+        <div class="field">
+          <label>Primary Formation</label>
+          <input type="text" id="progFormation" placeholder="e.g. 4-3-3" oninput="updateSidebar()">
+        </div>
+        <div class="field">
+          <label>System Style</label>
+          <select id="progStyle" onchange="updateSidebar()">
+            <option value="">Select...</option>
+            <option value="Possession-dominant">Possession-dominant</option>
+            <option value="Direct / Transition-based">Direct / Transition-based</option>
+            <option value="High-press / Gegenpressing">High-press / Gegenpressing</option>
+            <option value="Balanced / Hybrid">Balanced / Hybrid</option>
+            <option value="Low-block / Counter-attack">Low-block / Counter-attack</option>
+            <option value="Positional play">Positional play</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Matches Watched</label>
+          <input type="number" id="progMatches" placeholder="e.g. 5" min="0">
+        </div>
+      </div>
+      <div class="field">
+        <label>General Notes</label>
+        <textarea id="progNotes" placeholder="Overall observations about the program's identity, tendencies, and what they look for in recruits..."></textarea>
+      </div>
+    </div>
+
+    <!-- Dimension Evaluations -->
+    <div class="form-section">
+      <div class="form-section-label">Tactical Demand Assessment</div>
+      <div class="form-section-title">Score What the Program Demands</div>
+      <div class="form-section-desc">For each dimension, answer the guiding question based on film. Use the observable indicators to calibrate your score. The scale bands help anchor your rating - click one to auto-fill the score, or enter a number directly.</div>
+
+      <div id="evalCards"></div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Program Profile</div>
+      <div class="sidebar-program-name" id="sidebarName">New Program</div>
+      <div class="sidebar-program-style" id="sidebarStyle">—</div>
+      <div class="radar-wrap"><canvas id="sidebarRadar"></canvas></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Demand Scores</div>
+      <div class="score-summary" id="scoreSummary"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Saved Program Profiles</div>
+      <div id="savedProfiles"></div>
+    </div>
+
+    <div class="copy-output" id="copyOutput"></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   PROGRAM SCOUTING DIMENSIONS + EVALUATION CRITERIA
+   ============================================================ */
+
+const EVAL_DIMENSIONS = [
+  {
+    category: "System Fit",
+    items: [
+      {
+        name: "Transition Play",
+        question: "How often does this team attack through quick transitions after winning the ball?",
+        prompts: [
+          "After winning the ball, do they play forward immediately or reset?",
+          "Do forwards make early runs behind the defense on turnovers?",
+          "Does the team commit numbers forward in transition?",
+          "Are goals frequently scored within five seconds of winning the ball?"
+        ],
+        bands: [
+          { range: "1-3", label: "Rare", desc: "Team almost always resets possession after winning the ball" },
+          { range: "4-5", label: "Occasional", desc: "Transitions when the opportunity is obvious, but prefers to build" },
+          { range: "6-7", label: "Frequent", desc: "Actively looks to play forward quickly, commits runners" },
+          { range: "8-10", label: "Primary", desc: "Transition is the main attacking method - fast, direct, numbers forward" }
+        ]
+      },
+      {
+        name: "Possession Retention",
+        question: "How much does this team prioritize keeping the ball and controlling tempo?",
+        prompts: [
+          "Does the goalkeeper play short goal kicks to center backs?",
+          "Do they build through midfield rather than bypassing it?",
+          "Is there patient circulation in the opponent's half?",
+          "Do they recycle possession rather than force passes?"
+        ],
+        bands: [
+          { range: "1-3", label: "Low", desc: "Direct play, rarely sustains possession, long balls common" },
+          { range: "4-5", label: "Moderate", desc: "Some build-up but comfortable going direct" },
+          { range: "6-7", label: "High", desc: "Builds from the back regularly, recycles possession" },
+          { range: "8-10", label: "Dominant", desc: "Possession is the identity - patient, controlled, high touch counts" }
+        ]
+      },
+      {
+        name: "Pressing Intensity",
+        question: "How aggressively does this team press when out of possession?",
+        prompts: [
+          "Do they press the goalkeeper and center backs on goal kicks?",
+          "How high up the pitch do they start their press?",
+          "Do they press as a coordinated unit or rely on individual effort?",
+          "Is pressing sustained throughout the match or only in spurts?"
+        ],
+        bands: [
+          { range: "1-3", label: "Passive", desc: "Drops into a block, rarely presses high" },
+          { range: "4-5", label: "Selective", desc: "Presses in moments but retreats to a mid-block" },
+          { range: "6-7", label: "Active", desc: "Consistent pressing with clear triggers and coordination" },
+          { range: "8-10", label: "Intense", desc: "Gegenpressing or high press is core identity - relentless" }
+        ]
+      },
+      {
+        name: "Build-Up Involvement",
+        question: "How much does the system require forwards and midfielders to participate in build-up from deep?",
+        prompts: [
+          "Do strikers or attacking midfielders drop to receive between the lines?",
+          "Is the center forward expected to link play with back to goal?",
+          "Do midfielders rotate deep to offer passing options to defenders?",
+          "Are players comfortable receiving under pressure in their own half?"
+        ],
+        bands: [
+          { range: "1-3", label: "Minimal", desc: "Forwards stay high, build-up is defenders' job" },
+          { range: "4-5", label: "Some", desc: "Forwards drop occasionally but primarily stay ahead of the ball" },
+          { range: "6-7", label: "Significant", desc: "Forwards regularly involved in link play, midfielders rotate deep" },
+          { range: "8-10", label: "Essential", desc: "Everyone participates in build-up - forwards, wingers, all drop to receive" }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Positional Fit",
+    items: [
+      {
+        name: "Positional Discipline",
+        question: "How rigidly does the team maintain its tactical structure?",
+        prompts: [
+          "Do players stick to defined zones or freely roam?",
+          "Does the shape hold when one player presses or engages?",
+          "Are defensive and offensive shapes clearly different and disciplined?",
+          "Do they recover position quickly after losing the ball?"
+        ],
+        bands: [
+          { range: "1-3", label: "Fluid", desc: "Free-flowing, players interchange positions constantly" },
+          { range: "4-5", label: "Flexible", desc: "General structure with freedom to roam within guidelines" },
+          { range: "6-7", label: "Structured", desc: "Clear positional responsibilities with limited rotation" },
+          { range: "8-10", label: "Rigid", desc: "Strict positional play - every player has defined zones and tasks" }
+        ]
+      },
+      {
+        name: "Attacking Contribution",
+        question: "How much attacking output does the system demand from players across positions?",
+        prompts: [
+          "Are fullbacks expected to overlap and deliver crosses?",
+          "Do center midfielders arrive in the box for shots?",
+          "Is there emphasis on goals from open play vs. set pieces?",
+          "Does the team create high xG or rely on fewer, higher quality chances?"
+        ],
+        bands: [
+          { range: "1-3", label: "Conservative", desc: "Defense-first, attacking output concentrated in one or two players" },
+          { range: "4-5", label: "Moderate", desc: "Balanced approach, goals spread across the team" },
+          { range: "6-7", label: "Attacking", desc: "Multiple players expected to contribute goals and assists" },
+          { range: "8-10", label: "High-volume", desc: "System demands attacking output from all positions including defenders" }
+        ]
+      },
+      {
+        name: "Defensive Responsibility",
+        question: "How much defensive work does the system demand from attacking players?",
+        prompts: [
+          "Are wingers expected to track back and defend their fullback area?",
+          "Does the striker press from the front consistently?",
+          "Do attacking midfielders drop into a compact defensive block?",
+          "Is there a collective defensive effort or individual assignments?"
+        ],
+        bands: [
+          { range: "1-3", label: "Minimal", desc: "Attacking players stay high, defense is back line's job" },
+          { range: "4-5", label: "Some", desc: "Expected to press but not track deep" },
+          { range: "6-7", label: "Expected", desc: "All players contribute defensively, clear tracking responsibilities" },
+          { range: "8-10", label: "Non-negotiable", desc: "Every player defends - no passengers, full commitment required" }
+        ]
+      },
+      {
+        name: "Width/Combination Play",
+        question: "How much does the system rely on wide play and short combinations?",
+        prompts: [
+          "Are wingers key to the attacking plan?",
+          "Do they use overlapping or underlapping fullbacks?",
+          "Is there lots of one-two passing in tight areas?",
+          "Do they switch play to exploit the weak side regularly?"
+        ],
+        bands: [
+          { range: "1-3", label: "Central", desc: "Play is concentrated centrally, wide areas underused" },
+          { range: "4-5", label: "Mixed", desc: "Uses width but not the primary method of attack" },
+          { range: "6-7", label: "Important", desc: "Wide play and combinations are a significant part of the system" },
+          { range: "8-10", label: "Primary", desc: "Width is essential - overlaps, crosses, wide combinations drive the attack" }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Physical / Athletic Demands",
+    items: [
+      {
+        name: "Speed/Acceleration",
+        question: "How much does the system reward or require pace?",
+        prompts: [
+          "Does the team play balls in behind for runners to chase?",
+          "Are defenders expected to recover with speed in transition?",
+          "Do they rely on pace to stretch the opposition?",
+          "Is the team generally fast or more technical/tactical?"
+        ],
+        bands: [
+          { range: "1-3", label: "Low priority", desc: "Technical ability valued over pace, slow build-up" },
+          { range: "4-5", label: "Useful", desc: "Pace helps but isn't a core requirement of the system" },
+          { range: "6-7", label: "Important", desc: "Speed is important in transition and pressing phases" },
+          { range: "8-10", label: "Essential", desc: "System relies on speed - pressing, transition, recovery all demand pace" }
+        ]
+      },
+      {
+        name: "Endurance/Work Capacity",
+        question: "How physically demanding is this team's style across 90 minutes?",
+        prompts: [
+          "Does the pressing intensity hold late in matches?",
+          "Is there lots of box-to-box running demanded?",
+          "Do they run the same system regardless of game state?",
+          "Are late-game substitutes tactical or fitness-driven?"
+        ],
+        bands: [
+          { range: "1-3", label: "Manageable", desc: "Moderate physical demands, energy-conserving style" },
+          { range: "4-5", label: "Standard", desc: "Normal D1 athletic demands" },
+          { range: "6-7", label: "Demanding", desc: "High work rate expected, pressing and running throughout" },
+          { range: "8-10", label: "Extreme", desc: "Relentless intensity for 90 minutes - fitness is a prerequisite" }
+        ]
+      },
+      {
+        name: "Aerial Ability",
+        question: "How important is aerial play in this team's system?",
+        prompts: [
+          "Do they deliver lots of crosses into the box?",
+          "Are set pieces a major source of goals?",
+          "Is the goalkeeper expected to command the box?",
+          "Do they go long from goal kicks and defensive clearances?"
+        ],
+        bands: [
+          { range: "1-3", label: "Low", desc: "Ground-based play, minimal crossing or long balls" },
+          { range: "4-5", label: "Moderate", desc: "Some aerial play from set pieces but not a focus" },
+          { range: "6-7", label: "Important", desc: "Crossing and aerial duels are a regular part of the game" },
+          { range: "8-10", label: "Critical", desc: "Aerial play is a primary attacking and defensive weapon" }
+        ]
+      },
+      {
+        name: "Physicality/Dueling",
+        question: "How physical is this team's approach to the game?",
+        prompts: [
+          "Is there lots of body-to-body contact in their defensive approach?",
+          "Do forwards need to hold the ball up under physical pressure?",
+          "Is the team physically imposing or more slight/technical?",
+          "Do they win games through physical dominance?"
+        ],
+        bands: [
+          { range: "1-3", label: "Technical", desc: "Avoids physical duels, wins through positioning and passing" },
+          { range: "4-5", label: "Balanced", desc: "Physical when needed but not the identity" },
+          { range: "6-7", label: "Physical", desc: "Strong in duels, competitive, contact is part of the game plan" },
+          { range: "8-10", label: "Dominant", desc: "Physicality is a core strength - wins aerial, ground duels consistently" }
+        ]
+      }
+    ]
+  }
+];
+
+// ---- BUILD EVAL CARDS ----
+function buildEvalCards() {
+  const container = document.getElementById('evalCards');
+  let html = '';
+  let idx = 0;
+
+  EVAL_DIMENSIONS.forEach(cat => {
+    html += `<div class="category-divider">${cat.category}</div>`;
+    cat.items.forEach(dim => {
+      html += `
+        <div class="eval-card">
+          <div class="eval-card-header">
+            <div class="eval-card-name">${dim.name}</div>
+            <div class="eval-card-score-wrap">
+              <span class="eval-card-score-label">Demand</span>
+              <input type="number" class="eval-score-input" id="score_${idx}" min="1" max="10" placeholder="-" oninput="onScoreChange(${idx})">
+            </div>
+          </div>
+
+          <div class="eval-question">${dim.question}</div>
+
+          <div class="eval-scale" id="scale_${idx}">
+            ${dim.bands.map((b, bi) => `
+              <div class="scale-band" onclick="selectBand(${idx}, ${bi}, '${b.range}')">
+                <strong>${b.range}</strong>
+                ${b.label}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="eval-prompts">
+            <div class="eval-prompts-title">Observable Indicators</div>
+            ${dim.prompts.map(p => `
+              <div class="eval-prompt-row">
+                <input type="checkbox">
+                <span>${p}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="eval-evidence">
+            <label style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:6px;display:block;">Evidence / Notes</label>
+            <textarea id="evidence_${idx}" placeholder="What did you observe? Match minutes, specific examples..."></textarea>
+          </div>
+        </div>
+      `;
+      idx++;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+function selectBand(dimIdx, bandIdx, range) {
+  // Parse midpoint of range
+  const parts = range.split('-');
+  const mid = parts.length === 2 ? Math.round((parseInt(parts[0]) + parseInt(parts[1])) / 2) : parseInt(parts[0]);
+  document.getElementById('score_' + dimIdx).value = mid;
+
+  // Highlight band
+  const bands = document.querySelectorAll('#scale_' + dimIdx + ' .scale-band');
+  bands.forEach((b, i) => b.classList.toggle('active', i === bandIdx));
+
+  updateSidebar();
+}
+
+function onScoreChange(dimIdx) {
+  // Clear band highlights when manually entering
+  const bands = document.querySelectorAll('#scale_' + dimIdx + ' .scale-band');
+  bands.forEach(b => b.classList.remove('active'));
+  updateSidebar();
+}
+
+// ---- SIDEBAR ----
+let sidebarChart = null;
+
+function updateSidebar() {
+  const name = document.getElementById('progName').value || 'New Program';
+  const formation = document.getElementById('progFormation').value;
+  const style = document.getElementById('progStyle').value;
+  const styleText = [style, formation].filter(Boolean).join(' · ') || '—';
+
+  document.getElementById('sidebarName').textContent = name;
+  document.getElementById('sidebarStyle').textContent = styleText;
+
+  // Gather scores
+  const scores = [];
+  const labels = [];
+  const shortLabels = [];
+  let idx = 0;
+  const shortMap = {
+    'Transition Play': 'Transition', 'Possession Retention': 'Possession',
+    'Pressing Intensity': 'Pressing', 'Build-Up Involvement': 'Build-Up',
+    'Positional Discipline': 'Pos. Discipline', 'Attacking Contribution': 'Attack',
+    'Defensive Responsibility': 'Defense', 'Width/Combination Play': 'Width/Combos',
+    'Speed/Acceleration': 'Speed', 'Endurance/Work Capacity': 'Endurance',
+    'Aerial Ability': 'Aerial', 'Physicality/Dueling': 'Physicality'
+  };
+
+  EVAL_DIMENSIONS.forEach(cat => cat.items.forEach(d => {
+    const val = parseInt(document.getElementById('score_' + idx).value) || 0;
+    scores.push(val);
+    labels.push(d.name);
+    shortLabels.push(shortMap[d.name] || d.name);
+    idx++;
+  }));
+
+  // Score summary
+  const summaryHtml = labels.map((l, i) => `
+    <div class="score-row">
+      <span class="score-row-name">${l}</span>
+      ${scores[i] ? `<span class="score-row-value">${scores[i]}</span>` : `<span class="score-row-empty">—</span>`}
+    </div>
+  `).join('');
+  document.getElementById('scoreSummary').innerHTML = summaryHtml;
+
+  // Radar chart
+  if (sidebarChart) sidebarChart.destroy();
+
+  const hasData = scores.some(s => s > 0);
+  if (hasData) {
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.color = '#9a998f';
+
+    sidebarChart = new Chart(document.getElementById('sidebarRadar'), {
+      type: 'radar',
+      data: {
+        labels: shortLabels,
+        datasets: [{
+          data: scores.map(s => s || 0),
+          backgroundColor: 'rgba(37,99,235,0.1)',
+          borderColor: 'rgba(37,99,235,0.8)',
+          borderWidth: 2,
+          pointBackgroundColor: '#2563eb',
+          pointRadius: 3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          r: {
+            min: 0, max: 10,
+            ticks: { stepSize: 2, display: false },
+            grid: { color: 'rgba(0,0,0,0.06)' },
+            angleLines: { color: 'rgba(0,0,0,0.06)' },
+            pointLabels: { font: { size: 9, weight: 500 }, color: '#6b6b62', padding: 6 }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+}
+
+// ---- SAVE / LOAD PROFILES ----
+function getProfiles() {
+  return JSON.parse(localStorage.getItem('pm_program_profiles') || '[]');
+}
+
+function setProfiles(profiles) {
+  localStorage.setItem('pm_program_profiles', JSON.stringify(profiles));
+}
+
+function gatherFormData() {
+  const scores = [];
+  const evidence = [];
+  let idx = 0;
+  EVAL_DIMENSIONS.forEach(cat => cat.items.forEach(() => {
+    scores.push(parseInt(document.getElementById('score_' + idx).value) || 0);
+    evidence.push(document.getElementById('evidence_' + idx).value || '');
+    idx++;
+  }));
+
+  return {
+    name: document.getElementById('progName').value,
+    conference: document.getElementById('progConf').value,
+    coach: document.getElementById('progCoach').value,
+    formation: document.getElementById('progFormation').value,
+    style: document.getElementById('progStyle').value,
+    matchesWatched: document.getElementById('progMatches').value,
+    notes: document.getElementById('progNotes').value,
+    scores,
+    evidence,
+    savedAt: new Date().toISOString()
+  };
+}
+
+function saveProfile() {
+  const data = gatherFormData();
+  if (!data.name.trim()) { alert('Enter a program name first.'); return; }
+
+  const profiles = getProfiles();
+  const existing = profiles.findIndex(p => p.name === data.name);
+  if (existing >= 0) {
+    if (!confirm(`Update existing profile for "${data.name}"?`)) return;
+    profiles[existing] = data;
+  } else {
+    profiles.push(data);
+  }
+  setProfiles(profiles);
+  renderSavedProfiles();
+  alert(`Profile saved: ${data.name}`);
+}
+
+function loadProfile(idx) {
+  const profiles = getProfiles();
+  const d = profiles[idx];
+  if (!d) return;
+
+  document.getElementById('progName').value = d.name || '';
+  document.getElementById('progConf').value = d.conference || '';
+  document.getElementById('progCoach').value = d.coach || '';
+  document.getElementById('progFormation').value = d.formation || '';
+  document.getElementById('progStyle').value = d.style || '';
+  document.getElementById('progMatches').value = d.matchesWatched || '';
+  document.getElementById('progNotes').value = d.notes || '';
+
+  let si = 0;
+  EVAL_DIMENSIONS.forEach(cat => cat.items.forEach(() => {
+    document.getElementById('score_' + si).value = d.scores[si] || '';
+    document.getElementById('evidence_' + si).value = (d.evidence && d.evidence[si]) || '';
+    // Clear band highlights
+    document.querySelectorAll('#scale_' + si + ' .scale-band').forEach(b => b.classList.remove('active'));
+    si++;
+  }));
+
+  updateSidebar();
+}
+
+function deleteProfile(idx) {
+  const profiles = getProfiles();
+  if (!confirm(`Delete profile "${profiles[idx].name}"?`)) return;
+  profiles.splice(idx, 1);
+  setProfiles(profiles);
+  renderSavedProfiles();
+}
+
+function renderSavedProfiles() {
+  const profiles = getProfiles();
+  const container = document.getElementById('savedProfiles');
+  if (profiles.length === 0) {
+    container.innerHTML = '<div class="no-profiles">No saved profiles yet. Score a program and click Save Profile.</div>';
+    return;
+  }
+  container.innerHTML = profiles.map((p, i) => `
+    <div class="saved-profile-item">
+      <div>
+        <div class="saved-profile-name">${p.name}</div>
+        <div class="saved-profile-style">${[p.style, p.formation].filter(Boolean).join(' · ')}</div>
+      </div>
+      <div class="saved-profile-actions">
+        <button class="profile-action-btn" onclick="loadProfile(${i})">Load</button>
+        <button class="profile-action-btn delete" onclick="deleteProfile(${i})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ---- COPY TO BUILDER ----
+function saveAndGoToBuilder() {
+  const data = gatherFormData();
+  if (!data.name.trim()) {
+    alert('Enter a program name first.');
+    return;
+  }
+  if (!data.scores.some(s => s > 0)) {
+    alert('Score at least one dimension first.');
+    return;
+  }
+
+  // Save the profile
+  const profiles = getProfiles();
+  const existing = profiles.findIndex(p => p.name === data.name);
+  if (existing >= 0) {
+    profiles[existing] = data;
+  } else {
+    profiles.push(data);
+  }
+  setProfiles(profiles);
+
+  // Navigate to builder with this profile pre-selected
+  const profileIdx = profiles.findIndex(p => p.name === data.name);
+  window.location.href = 'report-builder.html?program=' + profileIdx;
+}
+
+function clearForm() {
+  if (!confirm('Clear all fields and start a new program evaluation?')) return;
+  document.querySelectorAll('.main-form input, .main-form textarea, .main-form select').forEach(el => {
+    if (el.type === 'number') el.value = '';
+    else if (el.type === 'checkbox') el.checked = false;
+    else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
+  });
+  document.querySelectorAll('.scale-band').forEach(b => b.classList.remove('active'));
+  updateSidebar();
+}
+
+// ---- INIT ----
+buildEvalCards();
+renderSavedProfiles();
+updateSidebar();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+backend:
+  name: github
+  repo: gavinhmacphee/pete-mcdonnell
+  branch: main
+  base_url: https://pete-mcdonnell.vercel.app
+  auth_endpoint: api/auth
+
+site_url: https://pete-mcdonnell.vercel.app
+display_url: https://pete-mcdonnell.vercel.app
+logo_url: https://pete-mcdonnell.vercel.app/images/pete-with-players.jpg
+
+media_folder: images
+public_folder: /images
+
+collections:
+  - name: writing
+    label: Writing
+    label_singular: Article
+    folder: content/writing
+    create: true
+    slug: '{{order}}-{{slug}}'
+    summary: '{{order}} · {{title}} ({{status}})'
+    sortable_fields: [order, date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: slug, label: 'URL slug', widget: string, hint: 'e.g. potential-is-not-always-visible — used in /writing/<slug>.html' }
+      - { name: order, label: Order, widget: number, value_type: int, default: 1, min: 1 }
+      - name: status
+        label: Status
+        widget: select
+        options:
+          - { label: 'Live', value: 'live' }
+          - { label: 'Coming soon', value: 'coming-soon' }
+        default: 'coming-soon'
+      - { name: date, label: Date, widget: datetime, format: 'YYYY-MM-DD', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - { name: date_label, label: 'Date label', widget: string, default: 'May 2026', hint: 'Shown on the article and the writing list (e.g. "May 2026")' }
+      - { name: deck, label: Deck / subtitle, widget: text, hint: 'One-sentence summary shown under the headline' }
+      - { name: read_time, label: 'Read time', widget: string, default: '5 min read' }
+      - { name: body, label: Body, widget: markdown }

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-902RJPS89Z"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-902RJPS89Z');</script>
+<title>{{title}} — Pete McDonnell</title>
+<meta name="description" content="{{deck}}">
+<meta property="og:title" content="{{title}} — Pete McDonnell">
+<meta property="og:description" content="{{deck}}">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .article-hero { padding: 200px 0 80px; border-bottom: 1px solid var(--border); }
+  .article-hero .container { max-width: 820px; }
+  .article-kicker {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+  }
+  .article-kicker::after { content: ''; display: block; width: 50px; height: 2px; background: var(--accent); }
+  .article-h1 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(40px, 6.5vw, 84px); line-height: 0.98; text-transform: uppercase;
+    letter-spacing: -0.5px; margin-bottom: 28px;
+  }
+  .article-deck {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 400;
+    font-size: clamp(18px, 1.8vw, 24px); letter-spacing: 0.5px; color: var(--gray-light);
+    line-height: 1.4; margin-bottom: 40px; max-width: 680px;
+  }
+  .article-byline {
+    display: flex; gap: 24px; align-items: center;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gray);
+  }
+  .article-byline strong { color: var(--white); font-weight: 700; }
+  .article-byline span.dot { color: var(--accent); }
+  .article-body { padding: 80px 0 120px; }
+  .article-body .container { max-width: 720px; }
+  .article-body p { font-size: 18px; color: var(--gray-light); line-height: 1.85; margin-bottom: 28px; }
+  .article-body p strong { color: var(--white); font-weight: 600; }
+  .article-body h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(26px, 3vw, 38px); text-transform: uppercase; letter-spacing: -0.2px;
+    line-height: 1.1; color: var(--white); margin: 56px 0 24px;
+  }
+  .article-body blockquote {
+    border-left: 3px solid var(--accent); padding: 4px 0 4px 28px; margin: 40px 0;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-style: italic;
+    font-size: clamp(22px, 2.4vw, 30px); line-height: 1.3; color: var(--white);
+    letter-spacing: 0.2px;
+  }
+  .article-body blockquote p { font-size: inherit; color: inherit; line-height: inherit; margin: 0; }
+  .article-end {
+    margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--border);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: 14px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent);
+  }
+  .next-cta {
+    background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 80px 0;
+  }
+  .next-cta .container { max-width: 820px; text-align: center; }
+  .next-cta h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; letter-spacing: -0.3px;
+    margin-bottom: 16px;
+  }
+  .next-cta p {
+    font-size: 16px; color: var(--gray-light); margin-bottom: 32px; max-width: 540px;
+    margin-left: auto; margin-right: auto;
+  }
+  .back-link {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gray-light); text-decoration: none; transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .back-bar { padding: 32px 0 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-brand">Pete <span class="accent">McDonnell</span></a>
+  <div class="nav-links">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#work">Work</a>
+    <a href="../index.html#writing">Writing</a>
+    <a href="../index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" aria-label="Menu" onclick="document.querySelector('.mobile-menu').classList.toggle('open');this.classList.toggle('open');document.body.classList.toggle('menu-open');">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu">
+  <a href="../index.html#about" onclick="closeMenu()">About</a>
+  <a href="../index.html#work" onclick="closeMenu()">Work</a>
+  <a href="../index.html#writing" onclick="closeMenu()">Writing</a>
+  <a href="../index.html#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<div class="container back-bar">
+  <a href="../index.html#writing" class="back-link">&larr; All writing</a>
+</div>
+
+<section class="article-hero">
+  <div class="container">
+    <div class="article-kicker">Writing &middot; {{order_padded}}</div>
+    <h1 class="article-h1">{{title}}.</h1>
+    <p class="article-deck">{{deck}}</p>
+    <div class="article-byline">
+      <span><strong>Pete McDonnell</strong></span>
+      <span class="dot">/</span>
+      <span>{{date_label}}</span>
+      <span class="dot">/</span>
+      <span>{{read_time}}</span>
+    </div>
+  </div>
+</section>
+
+<article class="article-body">
+  <div class="container">
+{{body}}
+    <div class="article-end">&mdash; PM</div>
+  </div>
+</article>
+
+<section class="next-cta">
+  <div class="container">
+    <h3>Working on this in your club?</h3>
+    <p>If selection, identification, or pathway alignment is the conversation in your building right now, the Club Development Audit is built around exactly this.</p>
+    <a href="../index.html#work" class="btn btn-accent">See how we work</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">Pete <span class="accent">McDonnell</span></div>
+    <div class="footer-meta">&copy; 2026 &middot; All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+function closeMenu(){
+  document.querySelector('.mobile-menu').classList.remove('open');
+  document.querySelector('.hamburger').classList.remove('open');
+  document.body.classList.remove('menu-open');
+}
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 24);
+});
+</script>
+</body>
+</html>
