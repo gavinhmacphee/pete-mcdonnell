@@ -411,39 +411,51 @@ h2, .section-h2 {
 }
 
 /* ── RECORD / ACHIEVEMENTS ── */
-.record-grid {
+.record-header { max-width: 720px; margin-bottom: 64px; }
+.record-header .section-lede { margin-bottom: 0; }
+
+.record-groups {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 80px;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
 }
 
-.record-copy h2 { margin-bottom: 24px; }
-.record-copy .section-lede { margin-bottom: 0; max-width: 420px; }
+.record-group-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--accent-soft);
+}
 
 .record-list {
   list-style: none;
-  border-top: 1px solid var(--border);
 }
 
 .record-list li {
   display: grid;
   grid-template-columns: 110px 1fr;
-  gap: 32px;
-  padding: 24px 0;
+  gap: 24px;
+  padding: 22px 0;
   border-bottom: 1px solid var(--border);
   align-items: baseline;
   transition: padding-left 0.2s;
 }
 
+.record-list li:last-child { border-bottom: 0; }
 .record-list li:hover { padding-left: 8px; }
 
 .record-year {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
   font-style: italic;
-  font-size: 18px;
-  letter-spacing: 2px;
+  font-size: 16px;
+  letter-spacing: 1.5px;
   color: var(--accent);
   text-transform: uppercase;
 }
@@ -452,7 +464,7 @@ h2, .section-h2 {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
   font-style: italic;
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: -0.2px;
@@ -461,19 +473,20 @@ h2, .section-h2 {
 }
 
 .record-detail p {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--gray);
   line-height: 1.5;
 }
 
 @media (max-width: 900px) {
-  .record-grid { grid-template-columns: 1fr; gap: 48px; }
+  .record-groups { grid-template-columns: 1fr; gap: 56px; }
 }
 
 @media (max-width: 600px) {
-  .record-list li { grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; }
-  .record-year { font-size: 14px; }
-  .record-detail h4 { font-size: 18px; }
+  .record-list li { grid-template-columns: 90px 1fr; gap: 16px; padding: 18px 0; }
+  .record-year { font-size: 13px; letter-spacing: 1px; }
+  .record-detail h4 { font-size: 17px; }
+  .record-detail p { font-size: 12px; }
 }
 
 /* ── PHOTO BREAK ── */
