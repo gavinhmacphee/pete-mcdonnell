@@ -410,6 +410,72 @@ h2, .section-h2 {
   border-bottom-color: var(--accent);
 }
 
+/* ── RECORD / ACHIEVEMENTS ── */
+.record-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.record-copy h2 { margin-bottom: 24px; }
+.record-copy .section-lede { margin-bottom: 0; max-width: 420px; }
+
+.record-list {
+  list-style: none;
+  border-top: 1px solid var(--border);
+}
+
+.record-list li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 32px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: baseline;
+  transition: padding-left 0.2s;
+}
+
+.record-list li:hover { padding-left: 8px; }
+
+.record-year {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.record-detail h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.record-detail p {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .record-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+
+@media (max-width: 600px) {
+  .record-list li { grid-template-columns: 80px 1fr; gap: 20px; padding: 20px 0; }
+  .record-year { font-size: 14px; }
+  .record-detail h4 { font-size: 18px; }
+}
+
 /* ── PHOTO BREAK ── */
 .photo-break {
   position: relative;
