@@ -79,44 +79,20 @@ function buildArticles(entries, template) {
 }
 
 function buildWritingList(entries) {
-  // Show all live entries first (linked), then fill remainder up to 8 with placeholders.
   const items = [];
   let n = 0;
   for (const entry of entries) {
+    if (entry.status !== 'live') continue;
     n++;
     const num = String(n).padStart(2, '0');
-    if (entry.status === 'live') {
-      const meta = entry.date_label || entry.date || 'Live';
-      items.push(`      <li class="writing-item">
+    const meta = entry.date_label || entry.date || 'Live';
+    items.push(`      <li class="writing-item">
         <div class="writing-num">${num}</div>
         <div class="writing-body">
           <a href="writing/${escapeHtml(entry.slug)}.html" class="writing-title-link"><h3 class="writing-title">${escapeHtml(entry.title)}</h3></a>
           <p class="writing-meta">${escapeHtml(meta)}</p>
         </div>
       </li>`);
-    } else {
-      items.push(`      <li class="writing-item">
-        <div class="writing-num">${num}</div>
-        <div class="writing-body">
-          <h3 class="writing-title">${escapeHtml(entry.title)}</h3>
-          <p class="writing-meta">Coming soon</p>
-        </div>
-      </li>`);
-    }
-  }
-  // Fill up to 8 with placeholder titles from the planned slate
-  let p = 0;
-  while (items.length < 8 && p < PLACEHOLDERS.length) {
-    n++;
-    const num = String(n).padStart(2, '0');
-    items.push(`      <li class="writing-item">
-        <div class="writing-num">${num}</div>
-        <div class="writing-body">
-          <h3 class="writing-title">${PLACEHOLDERS[p].title}</h3>
-          <p class="writing-meta">Coming soon</p>
-        </div>
-      </li>`);
-    p++;
   }
   return items.join('\n');
 }

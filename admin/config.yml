@@ -2,12 +2,12 @@ backend:
   name: github
   repo: gavinhmacphee/pete-mcdonnell
   branch: main
-  base_url: https://pete-mcdonnell.vercel.app
+  base_url: https://petermcdonnell.com
   auth_endpoint: api/auth
 
-site_url: https://pete-mcdonnell.vercel.app
-display_url: https://pete-mcdonnell.vercel.app
-logo_url: https://pete-mcdonnell.vercel.app/images/pete-with-players.jpg
+site_url: https://petermcdonnell.com
+display_url: https://petermcdonnell.com
+logo_url: https://petermcdonnell.com/images/pete-with-players.jpg
 
 media_folder: images
 public_folder: /images

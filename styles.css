@@ -701,6 +701,12 @@ h2, .section-h2 {
   align-items: center;
 }
 
+.footer-brand-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .footer-brand {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 800;
@@ -709,6 +715,16 @@ h2, .section-h2 {
   letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--white);
+}
+
+.footer-tagline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .footer-meta {
