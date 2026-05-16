@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Edit article — Peter McDonnell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+<style>
+  .EasyMDEContainer .CodeMirror {
+    background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.7;
+    min-height: 360px;
+  }
+  .EasyMDEContainer .CodeMirror-cursor { border-color: var(--accent); }
+  .EasyMDEContainer .editor-toolbar {
+    background: var(--panel); border: 1px solid var(--border); border-bottom: none;
+    opacity: 1;
+  }
+  .EasyMDEContainer .editor-toolbar button {
+    color: var(--text-dim) !important;
+  }
+  .EasyMDEContainer .editor-toolbar button:hover,
+  .EasyMDEContainer .editor-toolbar button.active {
+    background: var(--bg); border-color: var(--border); color: var(--accent) !important;
+  }
+  .EasyMDEContainer .editor-toolbar i.separator { border-color: var(--border); }
+  .EasyMDEContainer .editor-statusbar { color: var(--muted); }
+  .EasyMDEContainer .editor-preview {
+    background: var(--panel); color: var(--text);
+  }
+  .EasyMDEContainer .editor-preview blockquote {
+    border-left: 3px solid var(--accent); padding-left: 14px; color: var(--text);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="admin-shell" id="shell" hidden>
+  <div class="admin-bar">
+    <div>
+      <div class="admin-tag" id="mode-tag">New article</div>
+      <div class="admin-brand">Peter <span class="accent">McDonnell</span></div>
+    </div>
+    <div class="admin-bar-actions">
+      <a href="/admin/" class="btn btn-ghost">← Dashboard</a>
+    </div>
+  </div>
+
+  <div class="flash flash-error" id="flash-error" hidden></div>
+  <div class="flash flash-success" id="flash-success" hidden></div>
+
+  <form id="article-form" class="form-grid">
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Title</div>
+        <div class="hint">The headline. Shown on the article and the writing list.</div>
+      </div>
+      <input type="text" name="title" required>
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">URL slug</div>
+        <div class="hint">Lowercase, hyphens, no spaces. The article URL becomes <code>/writing/&lt;slug&gt;</code>.</div>
+      </div>
+      <input type="text" name="slug" required pattern="[a-z0-9-]+">
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Order</div>
+        <div class="hint">Position in the writing list. Lower numbers appear first.</div>
+      </div>
+      <input type="number" name="order" required min="1" value="1">
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Status</div>
+        <div class="hint">"Live" publishes the article. "Draft" keeps it hidden from the site.</div>
+      </div>
+      <select name="status">
+        <option value="live">Live</option>
+        <option value="coming-soon">Draft</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Date</div>
+        <div class="hint">Actual publication date (used for sorting).</div>
+      </div>
+      <input type="date" name="date">
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Date label</div>
+        <div class="hint">Human-readable date shown on the article (e.g. "May 2026").</div>
+      </div>
+      <input type="text" name="date_label" placeholder="May 2026">
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Deck / subtitle</div>
+        <div class="hint">One-sentence summary shown under the headline.</div>
+      </div>
+      <textarea name="deck" rows="2"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Read time</div>
+        <div class="hint">Shown in the byline (e.g. "6 min read").</div>
+      </div>
+      <input type="text" name="read_time" value="5 min read">
+    </div>
+
+    <div class="form-row">
+      <div class="label">
+        <div class="name">Body</div>
+        <div class="hint">Use the toolbar for formatting, or write in Markdown. <code>&gt;</code> for blockquotes.</div>
+      </div>
+      <textarea name="body" id="body-editor"></textarea>
+    </div>
+
+    <div class="form-actions">
+      <div class="left">
+        <button type="button" class="btn btn-danger" id="delete-btn" hidden>Delete</button>
+      </div>
+      <div class="right">
+        <a href="/admin/" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-accent" id="save-btn">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const originalFilename = params.get('file') || null;
+const isEdit = !!originalFilename;
+
+const shell = document.getElementById('shell');
+const form = document.getElementById('article-form');
+const modeTag = document.getElementById('mode-tag');
+const flashError = document.getElementById('flash-error');
+const flashSuccess = document.getElementById('flash-success');
+const deleteBtn = document.getElementById('delete-btn');
+const saveBtn = document.getElementById('save-btn');
+
+let easymde;
+
+async function api(path, options = {}) {
+  const r = await fetch(path, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    credentials: 'same-origin'
+  });
+  return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };
+}
+
+function setFlash(type, msg) {
+  flashError.hidden = type !== 'error';
+  flashSuccess.hidden = type !== 'success';
+  if (type === 'error') flashError.textContent = msg;
+  if (type === 'success') flashSuccess.textContent = msg;
+  if (type === 'success') setTimeout(() => { flashSuccess.hidden = true; }, 3000);
+}
+
+async function init() {
+  const me = await api('/api/me');
+  if (!me.data.authenticated) {
+    location.href = '/admin/';
+    return;
+  }
+  shell.hidden = false;
+
+  easymde = new EasyMDE({
+    element: document.getElementById('body-editor'),
+    spellChecker: false,
+    autofocus: false,
+    status: ['lines', 'words'],
+    toolbar: ['bold', 'italic', 'heading', '|', 'quote', 'unordered-list', 'ordered-list', '|', 'link', '|', 'preview', 'side-by-side', 'fullscreen']
+  });
+
+  if (isEdit) {
+    modeTag.textContent = 'Edit article';
+    deleteBtn.hidden = false;
+    const r = await api(`/api/articles?filename=${encodeURIComponent(originalFilename)}`);
+    if (!r.ok) {
+      setFlash('error', `Couldn't load article: ${r.data.error || 'unknown error'}`);
+      return;
+    }
+    const { meta, body } = r.data;
+    form.title.value = meta.title || '';
+    form.slug.value = meta.slug || '';
+    form.order.value = meta.order || 1;
+    form.status.value = meta.status || 'coming-soon';
+    form.date.value = (meta.date || '').slice(0, 10);
+    form.date_label.value = meta.date_label || '';
+    form.deck.value = meta.deck || '';
+    form.read_time.value = meta.read_time || '5 min read';
+    easymde.value(body || '');
+  } else {
+    modeTag.textContent = 'New article';
+    const r = await api('/api/articles');
+    if (r.ok && r.data.articles) {
+      const maxOrder = r.data.articles.reduce((m, a) => Math.max(m, a.order || 0), 0);
+      form.order.value = maxOrder + 1;
+    }
+  }
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  setFlash(null);
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving…';
+
+  const payload = {
+    title: form.title.value.trim(),
+    slug: form.slug.value.trim().toLowerCase(),
+    order: parseInt(form.order.value, 10),
+    status: form.status.value,
+    date: form.date.value,
+    date_label: form.date_label.value.trim(),
+    deck: form.deck.value.trim(),
+    read_time: form.read_time.value.trim(),
+    body: easymde.value(),
+    originalFilename
+  };
+
+  const r = await api('/api/articles', { method: 'POST', body: JSON.stringify(payload) });
+  if (r.ok) {
+    setFlash('success', 'Saved. The site will rebuild in ~60 seconds.');
+    if (!isEdit) {
+      setTimeout(() => { location.href = `/admin/edit.html?file=${encodeURIComponent(r.data.filename)}`; }, 600);
+    }
+  } else {
+    setFlash('error', r.data.error || 'Save failed');
+  }
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Save';
+});
+
+deleteBtn.addEventListener('click', async () => {
+  if (!confirm(`Delete "${form.title.value}"? This cannot be undone.`)) return;
+  deleteBtn.disabled = true;
+  deleteBtn.textContent = 'Deleting…';
+  const r = await api(`/api/articles?filename=${encodeURIComponent(originalFilename)}`, { method: 'DELETE' });
+  if (r.ok) {
+    location.href = '/admin/';
+  } else {
+    setFlash('error', r.data.error || 'Delete failed');
+    deleteBtn.disabled = false;
+    deleteBtn.textContent = 'Delete';
+  }
+});
+
+// Auto-suggest slug from title
+form.title.addEventListener('blur', () => {
+  if (!form.slug.value && form.title.value) {
+    form.slug.value = form.title.value.toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+});
+
+init();
+</script>
+</body>
+</html>

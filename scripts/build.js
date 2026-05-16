@@ -1,5 +1,6 @@
 // Build: read content/writing/*.md, generate writing/<slug>.html and inject the
-// writing list into index.html between <!-- WRITING_LIST_START --> markers.
+// writing list + site content (from content/site.json) into index.html
+// between marker comments.
 
 const fs = require('fs');
 const path = require('path');
@@ -8,19 +9,10 @@ const { marked } = require('marked');
 
 const ROOT = path.resolve(__dirname, '..');
 const CONTENT_DIR = path.join(ROOT, 'content', 'writing');
+const SITE_JSON = path.join(ROOT, 'content', 'site.json');
 const TEMPLATE_PATH = path.join(ROOT, 'templates', 'article.html');
 const INDEX_PATH = path.join(ROOT, 'index.html');
 const OUT_DIR = path.join(ROOT, 'writing');
-
-const PLACEHOLDERS = [
-  { title: 'Why Dortmund Are Comfortable Losing Youth Games' },
-  { title: 'The IDP Is Not the Development Plan' },
-  { title: 'Why Video Analysis Should Start With the Player&rsquo;s Eyes' },
-  { title: 'The Best Clubs Move Players Before They Label Them' },
-  { title: 'Selection Meetings Should Ask Better Questions' },
-  { title: 'Culture Is Built in Small Interactions' },
-  { title: 'Conflict Is Not the Problem' }
-];
 
 function escapeHtml(s) {
   return String(s || '').replace(/[&<>"']/g, c => ({
@@ -64,7 +56,6 @@ function renderArticle(entry, template) {
 
 function buildArticles(entries, template) {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
-  // Clean previously-generated files (only files we own — .html in OUT_DIR)
   for (const f of fs.readdirSync(OUT_DIR)) {
     if (f.endsWith('.html')) fs.unlinkSync(path.join(OUT_DIR, f));
   }
@@ -97,25 +88,63 @@ function buildWritingList(entries) {
   return items.join('\n');
 }
 
-function injectIntoIndex(listHtml) {
-  let html = fs.readFileSync(INDEX_PATH, 'utf8');
-  const start = '<!-- WRITING_LIST_START -->';
-  const end = '<!-- WRITING_LIST_END -->';
-  const re = new RegExp(`${start}[\\s\\S]*?${end}`);
+function loadSite() {
+  if (!fs.existsSync(SITE_JSON)) return null;
+  try { return JSON.parse(fs.readFileSync(SITE_JSON, 'utf8')); }
+  catch (e) { throw new Error(`Failed to parse ${SITE_JSON}: ${e.message}`); }
+}
+
+function buildAboutHtml(about) {
+  if (!about) return '';
+  const heading = `<h2>${escapeHtml(about.heading || '')}</h2>`;
+  const paras = (about.paragraphs || []).map(p => `      <p>${escapeHtml(p)}</p>`).join('\n');
+  return `      ${heading}\n${paras}`;
+}
+
+function buildRecordItemsHtml(items) {
+  if (!items || !items.length) return '';
+  return items.map(it => `          <li>
+            <span class="record-year">${escapeHtml(it.tag || '')}</span>
+            <div class="record-detail">
+              <h4>${escapeHtml(it.title || '')}</h4>
+              <p>${escapeHtml(it.subtitle || '')}</p>
+            </div>
+          </li>`).join('\n');
+}
+
+function injectBetween(html, startMarker, endMarker, replacement) {
+  const re = new RegExp(`${startMarker}[\\s\\S]*?${endMarker}`);
   if (!re.test(html)) {
-    throw new Error(`index.html is missing ${start} / ${end} markers`);
+    throw new Error(`index.html is missing ${startMarker} / ${endMarker} markers`);
   }
-  html = html.replace(re, `${start}\n${listHtml}\n      ${end}`);
+  return html.replace(re, `${startMarker}\n${replacement}\n      ${endMarker}`);
+}
+
+function injectIntoIndex(listHtml, site) {
+  let html = fs.readFileSync(INDEX_PATH, 'utf8');
+  html = injectBetween(html, '<!-- WRITING_LIST_START -->', '<!-- WRITING_LIST_END -->', listHtml);
+  if (site) {
+    if (site.about) {
+      html = injectBetween(html, '<!-- ABOUT_START -->', '<!-- ABOUT_END -->', buildAboutHtml(site.about));
+    }
+    if (site.qualifications) {
+      html = injectBetween(html, '<!-- QUALIFICATIONS_START -->', '<!-- QUALIFICATIONS_END -->', buildRecordItemsHtml(site.qualifications));
+    }
+    if (site.achievements) {
+      html = injectBetween(html, '<!-- ACHIEVEMENTS_START -->', '<!-- ACHIEVEMENTS_END -->', buildRecordItemsHtml(site.achievements));
+    }
+  }
   fs.writeFileSync(INDEX_PATH, html);
 }
 
 function main() {
   const entries = loadEntries();
   const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+  const site = loadSite();
   const liveCount = buildArticles(entries, template);
   const listHtml = buildWritingList(entries);
-  injectIntoIndex(listHtml);
-  console.log(`Built ${liveCount} article page(s) from ${entries.length} entr(ies). Writing list updated.`);
+  injectIntoIndex(listHtml, site);
+  console.log(`Built ${liveCount} article page(s) from ${entries.length} entr(ies). Site content${site ? ' + writing list' : ''} updated.`);
 }
 
 main();

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Edit site content — Peter McDonnell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="admin-shell" id="shell" hidden>
+  <div class="admin-bar">
+    <div>
+      <div class="admin-tag">Edit site content</div>
+      <div class="admin-brand">Peter <span class="accent">McDonnell</span></div>
+    </div>
+    <div class="admin-bar-actions">
+      <a href="/admin/" class="btn btn-ghost">← Dashboard</a>
+    </div>
+  </div>
+
+  <div class="flash flash-error" id="flash-error" hidden></div>
+  <div class="flash flash-success" id="flash-success" hidden></div>
+
+  <form id="site-form" class="form-grid">
+
+    <div class="admin-section">
+      <div class="admin-section-head">
+        <h2>About</h2>
+        <span class="hint">The bio section on the homepage</span>
+      </div>
+
+      <div class="form-row">
+        <div class="label">
+          <div class="name">Heading</div>
+          <div class="hint">The bold headline above the bio paragraphs.</div>
+        </div>
+        <input type="text" name="about_heading">
+      </div>
+
+      <div class="form-row">
+        <div class="label">
+          <div class="name">Paragraphs</div>
+          <div class="hint">Add as many or as few as you'd like. Each becomes a paragraph on the page.</div>
+        </div>
+        <div>
+          <div class="item-list" id="paragraphs-list"></div>
+          <div class="add-btn-wrap">
+            <button type="button" class="btn btn-sm" id="add-paragraph">+ Add paragraph</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <div class="admin-section-head">
+        <h2>Qualifications</h2>
+        <span class="hint">Shown under "The Record" on the homepage</span>
+      </div>
+
+      <div class="form-row">
+        <div class="label">
+          <div class="name">Items</div>
+          <div class="hint">Tag (left column, e.g. "UEFA A" or "2024"), title, and description.</div>
+        </div>
+        <div>
+          <div class="item-list" id="qualifications-list"></div>
+          <div class="add-btn-wrap">
+            <button type="button" class="btn btn-sm" id="add-qualification">+ Add qualification</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <div class="admin-section-head">
+        <h2>Achievements</h2>
+        <span class="hint">Shown under "The Record" on the homepage</span>
+      </div>
+
+      <div class="form-row">
+        <div class="label">
+          <div class="name">Items</div>
+          <div class="hint">Tag (e.g. "2024" or a number like "10"), title, and description.</div>
+        </div>
+        <div>
+          <div class="item-list" id="achievements-list"></div>
+          <div class="add-btn-wrap">
+            <button type="button" class="btn btn-sm" id="add-achievement">+ Add achievement</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <div class="left"></div>
+      <div class="right">
+        <a href="/admin/" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-accent" id="save-btn">Save</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+const shell = document.getElementById('shell');
+const form = document.getElementById('site-form');
+const flashError = document.getElementById('flash-error');
+const flashSuccess = document.getElementById('flash-success');
+const saveBtn = document.getElementById('save-btn');
+
+const paragraphsList = document.getElementById('paragraphs-list');
+const qualificationsList = document.getElementById('qualifications-list');
+const achievementsList = document.getElementById('achievements-list');
+
+async function api(path, options = {}) {
+  const r = await fetch(path, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    credentials: 'same-origin'
+  });
+  return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };
+}
+
+function setFlash(type, msg) {
+  flashError.hidden = type !== 'error';
+  flashSuccess.hidden = type !== 'success';
+  if (type === 'error') flashError.textContent = msg;
+  if (type === 'success') flashSuccess.textContent = msg;
+  if (type === 'success') setTimeout(() => { flashSuccess.hidden = true; }, 3000);
+}
+
+function paragraphRow(value = '') {
+  const wrap = document.createElement('div');
+  wrap.className = 'item-row';
+  wrap.style.gridTemplateColumns = '1fr 40px';
+  wrap.innerHTML = `
+    <textarea rows="3" placeholder="Paragraph text"></textarea>
+    <button type="button" class="remove-btn" title="Remove">×</button>
+  `;
+  wrap.querySelector('textarea').value = value;
+  wrap.querySelector('.remove-btn').addEventListener('click', () => wrap.remove());
+  return wrap;
+}
+
+function recordRow(item = {}) {
+  const wrap = document.createElement('div');
+  wrap.className = 'item-row';
+  wrap.innerHTML = `
+    <input type="text" placeholder="Tag (e.g. 2024)" data-field="tag">
+    <input type="text" placeholder="Title" data-field="title">
+    <input type="text" placeholder="Description" data-field="subtitle">
+    <button type="button" class="remove-btn" title="Remove">×</button>
+  `;
+  wrap.querySelector('[data-field=tag]').value = item.tag || '';
+  wrap.querySelector('[data-field=title]').value = item.title || '';
+  wrap.querySelector('[data-field=subtitle]').value = item.subtitle || '';
+  wrap.querySelector('.remove-btn').addEventListener('click', () => wrap.remove());
+  return wrap;
+}
+
+function readParagraphs() {
+  return [...paragraphsList.querySelectorAll('textarea')]
+    .map(t => t.value.trim())
+    .filter(Boolean);
+}
+
+function readRecordItems(container) {
+  return [...container.querySelectorAll('.item-row')].map(row => ({
+    tag: row.querySelector('[data-field=tag]').value.trim(),
+    title: row.querySelector('[data-field=title]').value.trim(),
+    subtitle: row.querySelector('[data-field=subtitle]').value.trim()
+  })).filter(it => it.tag || it.title || it.subtitle);
+}
+
+async function init() {
+  const me = await api('/api/me');
+  if (!me.data.authenticated) {
+    location.href = '/admin/';
+    return;
+  }
+  shell.hidden = false;
+
+  const r = await api('/api/site');
+  if (!r.ok) {
+    setFlash('error', r.data.error || 'Could not load site content');
+    return;
+  }
+  const data = r.data.data || { about: {}, qualifications: [], achievements: [] };
+
+  form.about_heading.value = data.about?.heading || '';
+  (data.about?.paragraphs || []).forEach(p => paragraphsList.appendChild(paragraphRow(p)));
+  (data.qualifications || []).forEach(q => qualificationsList.appendChild(recordRow(q)));
+  (data.achievements || []).forEach(a => achievementsList.appendChild(recordRow(a)));
+}
+
+document.getElementById('add-paragraph').addEventListener('click', () => {
+  paragraphsList.appendChild(paragraphRow());
+});
+document.getElementById('add-qualification').addEventListener('click', () => {
+  qualificationsList.appendChild(recordRow());
+});
+document.getElementById('add-achievement').addEventListener('click', () => {
+  achievementsList.appendChild(recordRow());
+});
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  setFlash(null);
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving…';
+
+  const payload = {
+    about: {
+      heading: form.about_heading.value.trim(),
+      paragraphs: readParagraphs()
+    },
+    qualifications: readRecordItems(qualificationsList),
+    achievements: readRecordItems(achievementsList)
+  };
+
+  const r = await api('/api/site', { method: 'POST', body: JSON.stringify(payload) });
+  if (r.ok) {
+    setFlash('success', 'Saved. The site will rebuild in ~60 seconds.');
+  } else {
+    setFlash('error', r.data.error || 'Save failed');
+  }
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Save';
+});
+
+init();
+</script>
+</body>
+</html>

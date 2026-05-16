@@ -1,13 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Admin — Peter McDonnell</title>
-  <link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin — Peter McDonnell</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
 </head>
 <body>
-  <script type="module" src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+
+<div id="login-view" class="login-wrap" hidden>
+  <form class="login-card" id="login-form">
+    <h1>Admin</h1>
+    <p class="sub">Peter McDonnell site editor</p>
+    <div class="flash flash-error" id="login-error" hidden></div>
+    <input type="password" name="password" placeholder="Password" autocomplete="current-password" required autofocus>
+    <button type="submit" class="btn btn-accent">Sign in</button>
+  </form>
+</div>
+
+<div id="dashboard-view" class="admin-shell" hidden>
+  <div class="admin-bar">
+    <div>
+      <div class="admin-tag">Editor</div>
+      <div class="admin-brand">Peter <span class="accent">McDonnell</span></div>
+    </div>
+    <div class="admin-bar-actions">
+      <a href="/" class="btn btn-ghost" target="_blank">View site</a>
+      <button class="btn" id="logout-btn">Sign out</button>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-head">
+      <h2>Writing</h2>
+      <a href="edit.html" class="btn btn-accent">+ New article</a>
+    </div>
+    <div id="articles-list">
+      <div class="empty-state">Loading…</div>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-head">
+      <h2>Site content</h2>
+      <a href="site.html" class="btn">Edit</a>
+    </div>
+    <div class="card">
+      <p style="color: var(--text-dim); font-size: 14px;">Edit the bio paragraphs, qualifications, and achievements shown on the homepage.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const loginView = document.getElementById('login-view');
+const dashView = document.getElementById('dashboard-view');
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+const articlesList = document.getElementById('articles-list');
+const logoutBtn = document.getElementById('logout-btn');
+
+async function api(path, options = {}) {
+  const r = await fetch(path, {
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    credentials: 'same-origin'
+  });
+  return { ok: r.ok, status: r.status, data: await r.json().catch(() => ({})) };
+}
+
+async function checkAuth() {
+  const r = await api('/api/me');
+  if (r.data.authenticated) {
+    show('dashboard');
+    await loadArticles();
+  } else {
+    show('login');
+  }
+}
+
+function show(view) {
+  loginView.hidden = view !== 'login';
+  dashView.hidden = view !== 'dashboard';
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.hidden = true;
+  const password = loginForm.password.value;
+  const r = await api('/api/login', { method: 'POST', body: JSON.stringify({ password }) });
+  if (r.ok) {
+    show('dashboard');
+    loginForm.password.value = '';
+    await loadArticles();
+  } else {
+    loginError.textContent = r.data.error || 'Login failed';
+    loginError.hidden = false;
+  }
+});
+
+logoutBtn.addEventListener('click', async () => {
+  await api('/api/logout', { method: 'POST' });
+  show('login');
+});
+
+async function loadArticles() {
+  articlesList.innerHTML = '<div class="empty-state">Loading…</div>';
+  const r = await api('/api/articles');
+  if (!r.ok) {
+    articlesList.innerHTML = `<div class="empty-state">Error loading articles: ${escapeHtml(r.data.error || 'unknown')}</div>`;
+    return;
+  }
+  const articles = r.data.articles || [];
+  if (!articles.length) {
+    articlesList.innerHTML = '<div class="empty-state">No articles yet. Click <strong>+ New article</strong> to write your first one.</div>';
+    return;
+  }
+  articlesList.innerHTML = articles.map(a => {
+    const numPadded = String(a.order).padStart(2, '0');
+    const statusClass = a.status === 'live' ? 'pill live' : 'pill';
+    const statusLabel = a.status === 'live' ? 'Live' : 'Draft';
+    return `
+      <div class="article-row">
+        <div class="num">${numPadded}</div>
+        <div class="meta">
+          <div class="title">${escapeHtml(a.title)}</div>
+          <div class="sub">
+            <span class="${statusClass}">${statusLabel}</span>
+            <span>${escapeHtml(a.date_label || '—')}</span>
+            <span style="color: var(--muted)">/writing/${escapeHtml(a.slug)}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a href="edit.html?file=${encodeURIComponent(a.filename)}" class="btn btn-sm">Edit</a>
+          <button class="btn btn-sm btn-danger" data-delete="${escapeHtml(a.filename)}" data-title="${escapeHtml(a.title)}">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  articlesList.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const filename = btn.dataset.delete;
+      const title = btn.dataset.title;
+      if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+      const r = await api(`/api/articles?filename=${encodeURIComponent(filename)}`, { method: 'DELETE' });
+      if (r.ok) {
+        await loadArticles();
+      } else {
+        alert(r.data.error || 'Delete failed');
+        btn.disabled = false;
+        btn.textContent = 'Delete';
+      }
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+checkAuth();
+</script>
 </body>
 </html>
