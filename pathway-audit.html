@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-902RJPS89Z"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-902RJPS89Z');</script>
+<title>Academy Pathway Audit — Peter McDonnell</title>
+<meta name="description" content="A three-season audit of player progression through the Philadelphia Union Academy — Union II debuts, professional contracts, and youth national-team call-ups across the 2023–24 U17, 2024–25 U18, and 2025–26 U16 groups.">
+<meta property="og:title" content="Academy Pathway Audit — Peter McDonnell">
+<meta property="og:description" content="A three-season audit of player progression through the Philadelphia Union Academy — debuts, professional contracts, and youth national-team call-ups.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ── HERO ── */
+  .audit-hero { padding: 190px 0 64px; border-bottom: 1px solid var(--border); }
+  .audit-hero .container { max-width: 980px; }
+  .audit-kicker {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+  }
+  .audit-kicker::after { content: ''; display: block; width: 50px; height: 2px; background: var(--accent); }
+  .audit-h1 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(44px, 7vw, 92px); line-height: 0.95; text-transform: uppercase;
+    letter-spacing: -0.5px; margin-bottom: 28px;
+  }
+  .audit-deck {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 400;
+    font-size: clamp(17px, 1.8vw, 23px); letter-spacing: 0.5px; color: var(--gray-light);
+    line-height: 1.45; margin-bottom: 44px; max-width: 720px;
+  }
+  .audit-meta { display: flex; flex-wrap: wrap; gap: 44px; }
+  .meta-block { display: flex; flex-direction: column; gap: 6px; }
+  .meta-label {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray);
+  }
+  .meta-value { font-size: 14px; color: var(--white); letter-spacing: 0.3px; }
+
+  /* ── TOTALS ── */
+  .totals-wrap { padding: 64px 0 0; }
+  .totals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .total-cell {
+    background: var(--dark);
+    padding: 32px 30px;
+    display: flex; flex-direction: column; gap: 8px;
+    transition: background 0.2s;
+  }
+  .total-cell:hover { background: var(--card); }
+  .total-num {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(46px, 5vw, 62px); line-height: 0.9; color: var(--accent);
+  }
+  .total-label {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray-light); line-height: 1.45;
+  }
+
+  /* ── SECTIONS ── */
+  .audit-main { padding: 40px 0 120px; }
+  .audit-section { padding-top: 80px; }
+  .audit-section-header {
+    display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
+    margin-bottom: 28px; padding-bottom: 18px; border-bottom: 2px solid var(--border);
+  }
+  .audit-section-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(28px, 3.6vw, 46px); line-height: 1; text-transform: uppercase;
+    letter-spacing: -0.3px; color: var(--white);
+  }
+  .audit-section-count {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent);
+  }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .audit-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 620px; }
+  .audit-table thead tr { border-bottom: 2px solid var(--border); }
+  .audit-table th {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
+    text-align: left; padding: 0 18px 13px 0; white-space: nowrap;
+  }
+  .audit-table td {
+    padding: 16px 18px 16px 0; border-bottom: 1px solid var(--border);
+    color: var(--gray-light); vertical-align: top; line-height: 1.6;
+  }
+  .audit-table tbody tr { transition: background 0.15s; }
+  .audit-table tbody tr:hover td { background: var(--card); }
+  .audit-table td:first-child { color: var(--white); font-weight: 600; white-space: nowrap; }
+
+  .group-tag {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+    font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--gray); white-space: nowrap;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-style: italic;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 9px; border: 1px solid; white-space: nowrap; margin-right: 4px;
+  }
+  .badge-u2 { color: #7ec88f; border-color: rgba(126,200,143,0.45); background: rgba(126,200,143,0.10); }
+  .badge-tbd { color: var(--gray); border-color: var(--border); background: rgba(255,255,255,0.02); }
+  .badge-hg { color: var(--accent); border-color: rgba(200,150,62,0.55); background: var(--accent-soft); }
+  .badge-usa { color: #8fb4d8; border-color: rgba(143,180,216,0.40); background: rgba(143,180,216,0.08); }
+  .badge-foreign { color: var(--gray-light); border-color: var(--border); background: rgba(255,255,255,0.03); }
+
+  /* ── NOTE ── */
+  .audit-note {
+    margin-top: 48px; padding: 28px 32px;
+    border-left: 3px solid var(--accent); background: var(--card);
+  }
+  .audit-note p { font-size: 14px; color: var(--gray-light); line-height: 1.85; }
+  .audit-note p + p { margin-top: 18px; }
+  .audit-note strong { color: var(--accent); font-weight: 700; }
+
+  /* ── NEXT CTA ── */
+  .next-cta {
+    background: var(--card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 80px 0;
+  }
+  .next-cta .container { max-width: 820px; text-align: center; }
+  .next-cta h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(32px, 4vw, 48px); text-transform: uppercase; letter-spacing: -0.3px;
+    margin-bottom: 16px;
+  }
+  .next-cta p {
+    font-size: 16px; color: var(--gray-light); margin-bottom: 32px; max-width: 560px;
+    margin-left: auto; margin-right: auto; line-height: 1.7;
+  }
+
+  /* ── BACK BAR ── */
+  .back-bar { padding: 32px 0 0; }
+  .back-link {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--gray-light); text-decoration: none; transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .audit-hero { padding: 140px 0 48px; }
+    .audit-meta { gap: 28px; }
+    .audit-section { padding-top: 64px; }
+    .total-cell { padding: 26px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Peter <span class="accent">McDonnell</span></a>
+  <div class="nav-links">
+    <a href="index.html#about">About</a>
+    <a href="index.html#work">Work</a>
+    <a href="index.html#writing">Writing</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button class="hamburger" aria-label="Menu" onclick="document.querySelector('.mobile-menu').classList.toggle('open');this.classList.toggle('open');document.body.classList.toggle('menu-open');">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu">
+  <a href="index.html#about" onclick="closeMenu()">About</a>
+  <a href="index.html#work" onclick="closeMenu()">Work</a>
+  <a href="index.html#writing" onclick="closeMenu()">Writing</a>
+  <a href="index.html#contact" onclick="closeMenu()">Contact</a>
+</div>
+
+<div class="container back-bar">
+  <a href="index.html" class="back-link">&larr; Peter McDonnell</a>
+</div>
+
+<section class="audit-hero">
+  <div class="container">
+    <div class="audit-kicker">Philadelphia Union Academy &middot; Pathway Audit &middot; v1 Public Source</div>
+    <h1 class="audit-h1">Academy Pathway<br><span class="accent">Output.</span></h1>
+    <p class="audit-deck">A three-season audit of player progression through the Philadelphia Union Academy &mdash; Union&nbsp;II debuts, professional contracts, and youth national-team call-ups across the groups on this pathway.</p>
+    <div class="audit-meta">
+      <div class="meta-block">
+        <span class="meta-label">Scope</span>
+        <span class="meta-value">3 seasons &middot; 2023&ndash;2026</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-label">Groups</span>
+        <span class="meta-value">2023&ndash;24 U17 &middot; 2024&ndash;25 U18 &middot; 2025&ndash;26 U16</span>
+      </div>
+      <div class="meta-block">
+        <span class="meta-label">Last updated</span>
+        <span class="meta-value">May 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOTALS -->
+<div class="totals-wrap">
+  <div class="container">
+    <div class="totals">
+      <div class="total-cell">
+        <span class="total-num">14</span>
+        <span class="total-label">Union II Debuts<br>Verified</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">1</span>
+        <span class="total-label">Union II Debut<br>Pending Confirmation</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">4</span>
+        <span class="total-label">Union II<br>Contracts</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">6</span>
+        <span class="total-label">Homegrown<br>Contracts</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">15</span>
+        <span class="total-label">Players with<br>YNT Call-ups</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">19</span>
+        <span class="total-label">US YNT<br>Events</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">2</span>
+        <span class="total-label">Foreign YNT<br>Events</span>
+      </div>
+      <div class="total-cell">
+        <span class="total-num">4</span>
+        <span class="total-label">U-17 World Cup<br>Rostered</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="audit-main">
+  <div class="container">
+
+    <!-- UNION II DEBUTS -->
+    <section class="audit-section">
+      <div class="audit-section-header">
+        <h2 class="audit-section-title">Union II Debuts</h2>
+        <span class="audit-section-count">16 players</span>
+      </div>
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Group</th>
+              <th>Debut / First Evidence</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cavan Sullivan</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Before HG signing; MLS debut July 2024</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Anisse Saidi</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Debut at age 15, 2023&ndash;24 season</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Jamir Johnson</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Professional debut 2024 (confirmed OC SC bio)</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Kellan LeBlanc</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>March 24, 2024 vs. New England Revolution II</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Neil Pierre</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>33 appearances before HG signing</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Andrew Craig</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>First professional start May 2026 vs. NERII; debut date precedes this, unconfirmed</td>
+              <td><span class="badge badge-tbd">Date TBC</span></td>
+            </tr>
+            <tr>
+              <td>Henry Bernstein</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>June 3, 2025 vs. Cincinnati</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Jordan Griffin</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>21 MLS NEXT Pro appearances since 2024</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Matheus De Paula</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>February 28, 2026 vs. Toronto FC II</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Nehan Hasan</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>February 28, 2026 vs. Toronto FC II</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Abdoulaye Diop</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td>Union II involvement indicated; exact match date unconfirmed</td>
+              <td><span class="badge badge-tbd">Likely</span></td>
+            </tr>
+            <tr>
+              <td>Andrei Chirila</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>MLS debut for FC Cincinnati as a Homegrown</td>
+              <td><span class="badge badge-hg">HG &middot; MLS</span></td>
+            </tr>
+            <tr>
+              <td>Gavin DeHart</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>FC Cincinnati 2 debut, 2025&ndash;26 season</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Lennon Harrington</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Union II debut, 2025&ndash;26 season</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Zachary Mastrodimos</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Union II debut, 2024&ndash;25 season</td>
+              <td><span class="badge badge-u2">Verified</span></td>
+            </tr>
+            <tr>
+              <td>Alex Smith</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Union II bench appearance &mdash; no confirmed debut minutes yet</td>
+              <td><span class="badge badge-tbd">Bench</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- HOMEGROWN CONTRACTS -->
+    <section class="audit-section">
+      <div class="audit-section-header">
+        <h2 class="audit-section-title">Homegrown Contracts</h2>
+        <span class="audit-section-count">6 players</span>
+      </div>
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Group</th>
+              <th>Date Signed</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Malik Jakupovic</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>April 2, 2026</td>
+              <td>Homegrown, Philadelphia Union. Through 2029&ndash;30, option 2030&ndash;31. MLS debut March 21 vs. Chicago Fire. US U-16/U-17 MYNT. Philadelphia Union&rsquo;s 30th HG. <span class="badge badge-hg">HG</span></td>
+            </tr>
+            <tr>
+              <td>Diego Rocio</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>May 8, 2025</td>
+              <td>HG rights sold to RSL for $100K GAM + up to $250K conditional. Monarchs MLSNP deal 2025; RSL first-team HG from 2026. Loaned to Club Am&eacute;rica (Liga MX) for 2026. Mexico U-18 MNT. <span class="badge badge-hg">HG</span></td>
+            </tr>
+            <tr>
+              <td>Anisse Saidi</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>January 3, 2025</td>
+              <td>HG rights sold to San Diego FC for $100K GAM + up to $250K conditional. Through 2028, club option 2029. Tunisia U-17 / US U-15 YNT. <span class="badge badge-hg">HG</span></td>
+            </tr>
+            <tr>
+              <td>Cavan Sullivan</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>May 9, 2024</td>
+              <td>Youngest-ever club HG; record signing. Future Man City pathway. <span class="badge badge-hg">HG</span></td>
+            </tr>
+            <tr>
+              <td>Neil Pierre</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>February 4, 2025</td>
+              <td>Through 2028, option 2029. MLS NEXT Pro Defender of the Year. Loaned to Lyngby 2026. <span class="badge badge-hg">HG</span></td>
+            </tr>
+            <tr>
+              <td>Andrei Chirila</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>2025&ndash;26 season</td>
+              <td>MLS Homegrown debut for FC Cincinnati. Left Union pathway. <span class="badge badge-hg">HG</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- UNION II CONTRACTS -->
+    <section class="audit-section">
+      <div class="audit-section-header">
+        <h2 class="audit-section-title">Union II Contracts</h2>
+        <span class="audit-section-count">4 players</span>
+      </div>
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Group</th>
+              <th>Date Signed</th>
+              <th>Detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Neil Pierre</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>Before HG signing</td>
+              <td>Played as Union II defender prior to first-team Homegrown contract</td>
+            </tr>
+            <tr>
+              <td>Kellan LeBlanc</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td>February 25, 2025</td>
+              <td>Midfielder; MLS NEXT Pro contract</td>
+            </tr>
+            <tr>
+              <td>Jordan Griffin</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>February 27, 2026</td>
+              <td>MLS NEXT Pro contract (not yet HG). 21 appearances since 2024. U-17 World Cup rostered. One of 11 Union Academy players to sign an MLSNP deal.</td>
+            </tr>
+            <tr>
+              <td>Malik Jakupovic</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td>May 29, 2025 &rarr; April 2, 2026</td>
+              <td>Signed MLSNP contract May 2025; upgraded to first-team HG April 2, 2026. 10 goals in 20 Union II appearances before HG deal.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- YNT CALL-UPS -->
+    <section class="audit-section">
+      <div class="audit-section-header">
+        <h2 class="audit-section-title">Youth National Team Call-Ups</h2>
+        <span class="audit-section-count">15 players &middot; 21 events</span>
+      </div>
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Group</th>
+              <th>Country</th>
+              <th>Level</th>
+              <th>Event</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cavan Sullivan</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-17 MNT</td>
+              <td>2025 FIFA U-17 World Cup</td>
+              <td>Oct 2025</td>
+            </tr>
+            <tr>
+              <td>Jamir Johnson</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 MYNT</td>
+              <td>April camp, West Palm Beach</td>
+              <td>Apr 2024</td>
+            </tr>
+            <tr>
+              <td>Jamir Johnson</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-17 MNT</td>
+              <td>2025 FIFA U-17 World Cup</td>
+              <td>Oct 2025</td>
+            </tr>
+            <tr>
+              <td>Kellan LeBlanc</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-17 MNT</td>
+              <td>2025 FIFA U-17 World Cup</td>
+              <td>Oct 2025</td>
+            </tr>
+            <tr>
+              <td>Anisse Saidi</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-15 BNT</td>
+              <td>Various camps</td>
+              <td>2023&ndash;24</td>
+            </tr>
+            <tr>
+              <td>Anisse Saidi</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-foreign">Tunisia</span></td>
+              <td>U-17</td>
+              <td>Tunisia U-17 World Cup cycle</td>
+              <td>2024&ndash;25</td>
+            </tr>
+            <tr>
+              <td>Diego Rocio</td>
+              <td><span class="group-tag">2023&ndash;24 U17</span></td>
+              <td><span class="badge badge-foreign">Mexico</span></td>
+              <td>U-18</td>
+              <td>Mexico U-18 MNT camp</td>
+              <td>Apr 2024</td>
+            </tr>
+            <tr>
+              <td>Jordan Griffin</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-17 MNT</td>
+              <td>2025 FIFA U-17 World Cup</td>
+              <td>Oct 2025</td>
+            </tr>
+            <tr>
+              <td>Malik Jakupovic</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 MYNT</td>
+              <td>September camp, Atlanta</td>
+              <td>Sep 2024</td>
+            </tr>
+            <tr>
+              <td>Willyam Ferreira</td>
+              <td><span class="group-tag">2024&ndash;25 U18</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 MYNT</td>
+              <td>Mexico friendlies, Toluca</td>
+              <td>Nov 2024</td>
+            </tr>
+            <tr>
+              <td>Abdoulaye Diop</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>International camp, Spain</td>
+              <td>Oct 2025</td>
+            </tr>
+            <tr>
+              <td>Abdoulaye Diop</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>March domestic camp, Florida</td>
+              <td>Mar 2026</td>
+            </tr>
+            <tr>
+              <td>Abdoulaye Diop</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>2026 Vertex Cup</td>
+              <td>Apr 2026</td>
+            </tr>
+            <tr>
+              <td>Abram Judy</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT Futures</td>
+              <td>First-ever U-16 BNT Futures camp</td>
+              <td>Feb 2026</td>
+            </tr>
+            <tr>
+              <td>Abram Judy</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>March domestic camp, Florida</td>
+              <td>Mar 2026</td>
+            </tr>
+            <tr>
+              <td>Abram Judy</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>2026 Vertex Cup</td>
+              <td>Apr 2026</td>
+            </tr>
+            <tr>
+              <td>Samuel Gallego</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>March domestic camp, Florida</td>
+              <td>Mar 2026</td>
+            </tr>
+            <tr>
+              <td>Timoni Gbalajobi</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>March domestic camp, Florida</td>
+              <td>Mar 2026</td>
+            </tr>
+            <tr>
+              <td>Landon Mulvenna</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>2026 Vertex Cup</td>
+              <td>Apr 2026</td>
+            </tr>
+            <tr>
+              <td>Aiden Gayle</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT Futures</td>
+              <td>First-ever U-16 BNT Futures camp</td>
+              <td>Feb 2026</td>
+            </tr>
+            <tr>
+              <td>Chris Thompson</td>
+              <td><span class="group-tag">2025&ndash;26 U16</span></td>
+              <td><span class="badge badge-usa">USA</span></td>
+              <td>U-16 BNT</td>
+              <td>March domestic camp, Florida</td>
+              <td>Mar 2026</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="audit-note">
+        <p><strong>Note on Andrew Craig:</strong> Union II player profile confirmed. First professional start verified May 2026 vs. New England Revolution II. Debut date (first appearance) precedes this and remains unconfirmed &mdash; match log audit required.</p>
+        <p><strong>Source basis:</strong> This is a v1 public-source audit. All high-confidence rows are sourced from official club / federation announcements or verified match reports. Medium-confidence rows (Anisse Saidi US U-15) are confirmed via player databases pending official USSF event-level source. Cavan Sullivan, Jamir Johnson, Kellan LeBlanc, and Jordan Griffin came through this environment and were named to the 2025 FIFA U-17 World Cup roster.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<section class="next-cta">
+  <div class="container">
+    <h3>This is what a pathway looks like, audited.</h3>
+    <p>Debuts, contracts, and call-ups are the output. The Club Development Audit builds the same end-to-end view of how your club identifies, progresses, and graduates players &mdash; and where the alignment breaks.</p>
+    <a href="index.html#work" class="btn btn-accent">See how we work</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand-block">
+      <div class="footer-brand">Peter <span class="accent">McDonnell</span></div>
+      <div class="footer-tagline">Educate Their Attention</div>
+    </div>
+    <div class="footer-meta">&copy; 2026 &middot; All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+function closeMenu(){
+  document.querySelector('.mobile-menu').classList.remove('open');
+  document.querySelector('.hamburger').classList.remove('open');
+  document.body.classList.remove('menu-open');
+}
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 24);
+});
+</script>
+</body>
+</html>

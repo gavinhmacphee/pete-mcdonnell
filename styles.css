@@ -489,6 +489,38 @@ h2, .section-h2 {
   .record-detail p { font-size: 12px; }
 }
 
+/* ── RECORD CTA ── */
+.record-cta {
+  margin-top: 56px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.record-cta-link {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.1;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.record-cta-link:hover { color: var(--accent-hover); }
+
+.record-cta-note {
+  font-size: 14px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
 /* ── PHOTO BREAK ── */
 .photo-break {
   position: relative;
