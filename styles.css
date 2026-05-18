@@ -15,7 +15,7 @@
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 
 body {
   font-family: 'DM Sans', sans-serif;
@@ -630,18 +630,13 @@ h2, .section-h2 {
   .audit-feature-content { padding: 44px 28px; }
 }
 
-@media (max-width: 480px) {
-  .audit-feature-stats { flex-direction: column; }
-  .af-stat {
-    flex-direction: row;
-    align-items: baseline;
-    gap: 12px;
-    border-right: 0;
-    padding-right: 0;
-    margin-right: 0;
-    padding-bottom: 14px;
-  }
-  .af-stat-label br { display: none; }
+@media (max-width: 600px) {
+  .audit-feature-content { padding: 36px 22px; }
+  .audit-feature-title { font-size: clamp(28px, 8vw, 42px); }
+  .audit-feature-text { font-size: 15px; }
+  .af-num { font-size: 40px; }
+  .af-stat { padding-right: 16px; margin-right: 16px; }
+  .af-stat-label { font-size: 11px; letter-spacing: 1.5px; }
 }
 
 /* ── PHOTO BREAK ── */

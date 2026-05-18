@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="styles.css">
 <style>
   /* ── HERO ── */
-  .audit-hero { position: relative; overflow: hidden; padding: 190px 0 64px; border-bottom: 1px solid var(--border); }
+  .audit-hero { position: relative; overflow: hidden; padding: 56px 0 64px; border-bottom: 1px solid var(--border); }
   .audit-hero-bg {
     position: absolute; inset: 0;
     background-size: cover; background-position: center 20%;
@@ -100,6 +100,9 @@
 
   /* ── TABLES ── */
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-wrap::-webkit-scrollbar { height: 8px; }
+  .table-wrap::-webkit-scrollbar-track { background: var(--dark); }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--border); }
   .audit-table { width: 100%; border-collapse: collapse; font-size: 14px; min-width: 620px; }
   .audit-table thead tr { border-bottom: 2px solid var(--border); }
   .audit-table th {
@@ -160,7 +163,7 @@
   }
 
   /* ── BACK BAR ── */
-  .back-bar { padding: 32px 0 0; }
+  .back-bar { padding: 100px 0 4px; }
   .back-link {
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
     font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase;
@@ -169,10 +172,32 @@
   .back-link:hover { color: var(--accent); }
 
   @media (max-width: 768px) {
-    .audit-hero { padding: 140px 0 48px; }
-    .audit-meta { gap: 28px; }
-    .audit-section { padding-top: 64px; }
-    .total-cell { padding: 26px 24px; }
+    .audit-hero { padding: 44px 0 48px; }
+    .audit-meta { gap: 22px 30px; }
+    .audit-section { padding-top: 60px; }
+    .audit-photo-break { margin-top: 56px; }
+    .total-cell { padding: 24px 22px; }
+    .audit-note { padding: 24px 22px; }
+    .next-cta { padding: 64px 0; }
+  }
+
+  @media (max-width: 600px) {
+    .back-bar { padding: 84px 0 4px; }
+    .audit-hero { padding: 36px 0 44px; }
+    .audit-kicker { font-size: 11px; letter-spacing: 2px; gap: 0; margin-bottom: 18px; }
+    .audit-kicker::after { display: none; }
+    .audit-h1 { font-size: clamp(40px, 13vw, 66px); margin-bottom: 22px; }
+    .audit-deck { font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
+    .totals { grid-template-columns: 1fr 1fr; }
+    .total-num { font-size: 38px; }
+    .total-label { font-size: 11px; letter-spacing: 1.5px; }
+    .audit-section-header { gap: 6px 14px; margin-bottom: 22px; padding-bottom: 14px; }
+    .audit-section-title { font-size: clamp(24px, 7vw, 34px); }
+    .audit-section-count { font-size: 12px; }
+    .audit-table { font-size: 13px; min-width: 560px; }
+    .audit-table th { font-size: 11px; letter-spacing: 1px; padding-right: 12px; }
+    .audit-table td { padding: 13px 12px 13px 0; }
+    .next-cta h3 { font-size: clamp(26px, 8vw, 34px); }
   }
 </style>
 </head>
@@ -198,7 +223,7 @@
 </div>
 
 <div class="container back-bar">
-  <a href="index.html" class="back-link">&larr; Peter McDonnell</a>
+  <a href="index.html" class="back-link">&larr; Back to home</a>
 </div>
 
 <section class="audit-hero">
@@ -206,7 +231,7 @@
   <div class="audit-hero-overlay"></div>
   <div class="container">
     <div class="audit-kicker">Philadelphia Union Academy &middot; Pathway Audit &middot; v1 Public Source</div>
-    <h1 class="audit-h1">Academy Pathway<br><span class="accent">Output.</span></h1>
+    <h1 class="audit-h1">Academy Pathway <span class="accent">Output.</span></h1>
     <p class="audit-deck">Three seasons of player progression at the Philadelphia Union Academy: every Union&nbsp;II debut, professional contract, and youth national-team call-up from the groups below.</p>
     <div class="audit-meta">
       <div class="meta-block">
