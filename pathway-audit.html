@@ -16,8 +16,19 @@
 <link rel="stylesheet" href="styles.css">
 <style>
   /* ── HERO ── */
-  .audit-hero { padding: 190px 0 64px; border-bottom: 1px solid var(--border); }
-  .audit-hero .container { max-width: 980px; }
+  .audit-hero { position: relative; overflow: hidden; padding: 190px 0 64px; border-bottom: 1px solid var(--border); }
+  .audit-hero-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center 20%;
+    filter: grayscale(25%) contrast(1.05);
+  }
+  .audit-hero-overlay {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to right, rgba(10,18,32,0.97) 0%, rgba(10,18,32,0.88) 60%, rgba(10,18,32,0.72) 100%),
+      linear-gradient(to top, rgba(10,18,32,0.95) 0%, rgba(10,18,32,0.55) 100%);
+  }
+  .audit-hero .container { position: relative; z-index: 2; max-width: 980px; }
   .audit-kicker {
     font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-style: italic;
     font-size: 12px; letter-spacing: 4px; text-transform: uppercase; color: var(--accent);
@@ -84,6 +95,8 @@
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
     font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent);
   }
+
+  .audit-photo-break { margin-top: 72px; }
 
   /* ── TABLES ── */
   .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -189,6 +202,8 @@
 </div>
 
 <section class="audit-hero">
+  <div class="audit-hero-bg" style="background-image:url('images/pete-addressing-team-web.jpg');"></div>
+  <div class="audit-hero-overlay"></div>
   <div class="container">
     <div class="audit-kicker">Philadelphia Union Academy &middot; Pathway Audit &middot; v1 Public Source</div>
     <h1 class="audit-h1">Academy Pathway<br><span class="accent">Output.</span></h1>
@@ -474,6 +489,18 @@
         </table>
       </div>
     </section>
+
+  </div>
+
+  <div class="photo-break audit-photo-break">
+    <img src="images/hero-1.png" alt="Philadelphia Union Academy squad in a training huddle">
+    <div class="photo-break-caption">
+      <div class="caption-label">The Environment</div>
+      <div class="caption-text">The groups behind the numbers.</div>
+    </div>
+  </div>
+
+  <div class="container">
 
     <!-- YNT CALL-UPS -->
     <section class="audit-section">
