@@ -5,17 +5,5 @@
       "Peter McDonnell is an Academy Head Coach at Philadelphia Union with a coaching path that runs from the Football Association of Ireland to NCAA Division I to MLS Next. He has worked at every level of youth soccer in America: grassroots, club, high school, NCAA, and MLS academy.",
       "He holds the UEFA A License from the Football Association of Ireland, the US Soccer Academy Director License, and the Elite Formation Coaching License, a 2024 program for top-level MLS coaches run jointly with the French Football Federation. The work is built around one belief: development is a system, not a moment, and players reveal potential when the environment demands it."
     ]
-  },
-  "qualifications": [
-    { "tag": "UEFA A", "title": "UEFA A License", "subtitle": "Football Association of Ireland" },
-    { "tag": "US Soccer", "title": "Academy Director License", "subtitle": "United States Soccer Federation" },
-    { "tag": "2024", "title": "Elite Formation Coaching License", "subtitle": "One of 25 MLS coaches selected · MLS × French Football Federation" },
-    { "tag": "M.S.", "title": "Kinesiology & Physical Education", "subtitle": "University of Maine, NCAA Division I" }
-  ],
-  "achievements": [
-    { "tag": "2024", "title": "Generation adidas Cup Champions", "subtitle": "U17 Philadelphia Union Academy" },
-    { "tag": "2024", "title": "MLS NEXT Cup Semi-Finalists", "subtitle": "U17 Philadelphia Union Academy" },
-    { "tag": "10", "title": "MLS NEXT Pro Debuts", "subtitle": "Players from his Philadelphia Union groups" },
-    { "tag": "6", "title": "First Professional Contracts", "subtitle": "Players signed out of his Philadelphia Union groups" }
-  ]
+  }
 }
